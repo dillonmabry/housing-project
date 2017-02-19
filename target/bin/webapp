@@ -1,0 +1,100 @@
+#!/bin/sh
+# ----------------------------------------------------------------------------
+#  Copyright 2001-2006 The Apache Software Foundation.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+# ----------------------------------------------------------------------------
+
+#   Copyright (c) 2001-2002 The Apache Software Foundation.  All rights
+#   reserved.
+
+BASEDIR=`dirname $0`/..
+BASEDIR=`(cd "$BASEDIR"; pwd)`
+
+
+
+# OS specific support.  $var _must_ be set to either true or false.
+cygwin=false;
+darwin=false;
+case "`uname`" in
+  CYGWIN*) cygwin=true ;;
+  Darwin*) darwin=true
+           if [ -z "$JAVA_VERSION" ] ; then
+             JAVA_VERSION="CurrentJDK"
+           else
+             echo "Using Java version: $JAVA_VERSION"
+           fi
+           if [ -z "$JAVA_HOME" ] ; then
+             JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/${JAVA_VERSION}/Home
+           fi
+           ;;
+esac
+
+if [ -z "$JAVA_HOME" ] ; then
+  if [ -r /etc/gentoo-release ] ; then
+    JAVA_HOME=`java-config --jre-home`
+  fi
+fi
+
+# For Cygwin, ensure paths are in UNIX format before anything is touched
+if $cygwin ; then
+  [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
+  [ -n "$CLASSPATH" ] && CLASSPATH=`cygpath --path --unix "$CLASSPATH"`
+fi
+
+# If a specific java binary isn't specified search for the standard 'java' binary
+if [ -z "$JAVACMD" ] ; then
+  if [ -n "$JAVA_HOME"  ] ; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
+      # IBM's JDK on AIX uses strange locations for the executables
+      JAVACMD="$JAVA_HOME/jre/sh/java"
+    else
+      JAVACMD="$JAVA_HOME/bin/java"
+    fi
+  else
+    JAVACMD=`which java`
+  fi
+fi
+
+if [ ! -x "$JAVACMD" ] ; then
+  echo "Error: JAVA_HOME is not defined correctly."
+  echo "  We cannot execute $JAVACMD"
+  exit 1
+fi
+
+if [ -z "$REPO" ]
+then
+  REPO="$BASEDIR"/repo
+fi
+
+CLASSPATH=$CLASSPATH_PREFIX:"$BASEDIR"/etc:"$REPO"/org/apache/tomcat/embed/tomcat-embed-core/8.0.1/tomcat-embed-core-8.0.1.jar:"$REPO"/org/apache/tomcat/embed/tomcat-embed-logging-juli/8.0.1/tomcat-embed-logging-juli-8.0.1.jar:"$REPO"/org/apache/tomcat/embed/tomcat-embed-jasper/8.0.1/tomcat-embed-jasper-8.0.1.jar:"$REPO"/org/apache/tomcat/embed/tomcat-embed-el/8.0.1/tomcat-embed-el-8.0.1.jar:"$REPO"/org/eclipse/jdt/core/compiler/ecj/4.3.1/ecj-4.3.1.jar:"$REPO"/org/apache/tomcat/tomcat-jasper/8.0.1/tomcat-jasper-8.0.1.jar:"$REPO"/org/apache/tomcat/tomcat-servlet-api/8.0.1/tomcat-servlet-api-8.0.1.jar:"$REPO"/org/apache/tomcat/tomcat-juli/8.0.1/tomcat-juli-8.0.1.jar:"$REPO"/org/apache/tomcat/tomcat-jsp-api/8.0.1/tomcat-jsp-api-8.0.1.jar:"$REPO"/org/apache/tomcat/tomcat-el-api/8.0.1/tomcat-el-api-8.0.1.jar:"$REPO"/org/apache/tomcat/tomcat-jasper-el/8.0.1/tomcat-jasper-el-8.0.1.jar:"$REPO"/org/apache/tomcat/tomcat-api/8.0.1/tomcat-api-8.0.1.jar:"$REPO"/org/apache/tomcat/tomcat-util-scan/8.0.1/tomcat-util-scan-8.0.1.jar:"$REPO"/org/apache/tomcat/tomcat-util/8.0.1/tomcat-util-8.0.1.jar:"$REPO"/org/apache/maven/maven-core/3.2.5/maven-core-3.2.5.jar:"$REPO"/org/apache/maven/maven-model/3.2.5/maven-model-3.2.5.jar:"$REPO"/org/codehaus/plexus/plexus-utils/3.0.20/plexus-utils-3.0.20.jar:"$REPO"/org/apache/maven/maven-settings/3.2.5/maven-settings-3.2.5.jar:"$REPO"/org/apache/maven/maven-settings-builder/3.2.5/maven-settings-builder-3.2.5.jar:"$REPO"/org/codehaus/plexus/plexus-interpolation/1.21/plexus-interpolation-1.21.jar:"$REPO"/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar:"$REPO"/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.jar:"$REPO"/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.jar:"$REPO"/org/apache/maven/maven-repository-metadata/3.2.5/maven-repository-metadata-3.2.5.jar:"$REPO"/org/apache/maven/maven-artifact/3.2.5/maven-artifact-3.2.5.jar:"$REPO"/org/apache/maven/maven-plugin-api/3.2.5/maven-plugin-api-3.2.5.jar:"$REPO"/org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.0.M1/org.eclipse.sisu.plexus-0.3.0.M1.jar:"$REPO"/javax/enterprise/cdi-api/1.0/cdi-api-1.0.jar:"$REPO"/javax/annotation/jsr250-api/1.0/jsr250-api-1.0.jar:"$REPO"/javax/inject/javax.inject/1/javax.inject-1.jar:"$REPO"/org/eclipse/sisu/org.eclipse.sisu.inject/0.3.0.M1/org.eclipse.sisu.inject-0.3.0.M1.jar:"$REPO"/org/codehaus/plexus/plexus-classworlds/2.5.2/plexus-classworlds-2.5.2.jar:"$REPO"/org/apache/maven/maven-model-builder/3.2.5/maven-model-builder-3.2.5.jar:"$REPO"/org/apache/maven/maven-aether-provider/3.2.5/maven-aether-provider-3.2.5.jar:"$REPO"/org/eclipse/aether/aether-api/1.0.0.v20140518/aether-api-1.0.0.v20140518.jar:"$REPO"/org/eclipse/aether/aether-spi/1.0.0.v20140518/aether-spi-1.0.0.v20140518.jar:"$REPO"/org/eclipse/aether/aether-util/1.0.0.v20140518/aether-util-1.0.0.v20140518.jar:"$REPO"/org/eclipse/aether/aether-impl/1.0.0.v20140518/aether-impl-1.0.0.v20140518.jar:"$REPO"/org/sonatype/sisu/sisu-guice/3.2.3/sisu-guice-3.2.3-no_aop.jar:"$REPO"/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:"$REPO"/com/google/guava/guava/16.0.1/guava-16.0.1.jar:"$REPO"/org/json/json/20160810/json-20160810.jar:"$REPO"/org/jsoup/jsoup/1.8.3/jsoup-1.8.3.jar:"$REPO"/com/example/housing-project/1.0/housing-project-1.0.jar
+EXTRA_JVM_ARGUMENTS=""
+
+# For Cygwin, switch paths to Windows format before running java
+if $cygwin; then
+  [ -n "$CLASSPATH" ] && CLASSPATH=`cygpath --path --windows "$CLASSPATH"`
+  [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --path --windows "$JAVA_HOME"`
+  [ -n "$HOME" ] && HOME=`cygpath --path --windows "$HOME"`
+  [ -n "$BASEDIR" ] && BASEDIR=`cygpath --path --windows "$BASEDIR"`
+  [ -n "$REPO" ] && REPO=`cygpath --path --windows "$REPO"`
+fi
+
+exec "$JAVACMD" $JAVA_OPTS \
+  $EXTRA_JVM_ARGUMENTS \
+  -classpath "$CLASSPATH" \
+  -Dapp.name="webapp" \
+  -Dapp.pid="$$" \
+  -Dapp.repo="$REPO" \
+  -Dbasedir="$BASEDIR" \
+  launch.Main \
+  "$@"
