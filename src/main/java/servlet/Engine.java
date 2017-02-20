@@ -134,12 +134,18 @@ public class Engine extends HttpServlet {
 				if(statusCode == 200){
 					//Get Document object after parsing the html from given url.
 					document = Jsoup.connect(url).get();
-					Elements specs = document.select(".zsg-photo-card-spec"); //Get price
 					JSONArray jsonArray = new JSONArray();
 					JSONObject soldValues = new JSONObject();
 					JSONObject houseInfo = new JSONObject();
+					JSONObject nearInfo = new JSONObject();
+					Elements nearByCities = document.select(".zsg-g_gutterless:matches([$-])");
+					for(int i=1; i < nearByCities.size(); i++) {
+						String nearByCity = nearByCities.get(i).text().replace("-", "");
+						nearInfo.append("nearByInfo", nearByCity);
+					}
+					Elements specs = document.select(".zsg-photo-card-spec"); //get specs
 					for (int i=0; i < specs.size(); i++) {
-						System.out.println(specs.get(i).text());
+						//System.out.println(specs.get(i).text());
 						if(specs.get(i).text().contains("SOLD")) {
 							soldValues.append("soldValues", specs.get(i).text());
 						} else if(specs.get(i).text().startsWith("Price")) {
@@ -148,8 +154,9 @@ public class Engine extends HttpServlet {
 					}
 					jsonArray.put(soldValues);
 					jsonArray.put(houseInfo);
+					jsonArray.put(nearInfo);
 					response.getWriter().write(jsonArray.toString());
-				}		
+				}			
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (JSONException e) {
