@@ -70,7 +70,6 @@ public class Engine extends HttpServlet {
 				        .timeout(0).execute();
 				int statusCode = responseSoup.statusCode();
 				if(statusCode == 200){
-				    //Document doc = Jsoup.parse(responseSoup.body(),url);
 				    Document xmlDoc = Jsoup.parse(responseSoup.body(), url, Parser.xmlParser());
 				    System.out.println(xmlDoc.toString());
 				    String estimateAmount = xmlDoc.select("amount").first().text();

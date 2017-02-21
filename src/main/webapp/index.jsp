@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-
 <title>ITCS 3162 - Group H2</title>
+<!-- icon -->
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
 
 <!-- Bootstrap Core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Custom CSS -->
 <link href="css/scrollingnav.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="css/main-theme.min.css" rel="stylesheet">
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -26,13 +28,10 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
 
 <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
-
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-
 	<!-- Navigation -->
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">
@@ -43,8 +42,8 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand page-scroll" href="#page-top">Housing
-					Price Estimator</a>
+				<a class="navbar-brand page-scroll" href="#page-top">
+				Housing Price Estimator</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -65,7 +64,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<h1>Estimate Housing Prices!</h1>
+					<h1>Estimate Housing Prices</h1>
 					<h4>
 						<strong>Usage Instructions:</strong> To estimate a price, enter
 						the corresponding inputs and click the Run Analysis button!
@@ -129,7 +128,7 @@
 								<option value="NJ">New Jersey</option>
 								<option value="NM">New Mexico</option>
 								<option value="NY">New York</option>
-								<option value="NC">North Carolina</option>
+								<option value="NC" selected>North Carolina</option>
 								<option value="ND">North Dakota</option>
 								<option value="OH">Ohio</option>
 								<option value="OK">Oklahoma</option>
@@ -150,35 +149,54 @@
 							</select>
 						</div>
 					</form>
+					<br />
 					<button id='submitBtn' type="submit" class="btn btn-primary"
 						data-toggle="modal" data-target="#loadingId">Run Analysis</button>
+					<a id="moreFacts" class="btn btn-primary page-scroll" href="#factsInfo" style="display:none;">See More Facts</a>
 					<div>
 						<br/>
 						<h4><span id='warnLabel' class="label label-default" style="display:none;">Please enter an address, city, and state!</span></h4>
 					</div>
 					<hr />
-					<h3>Your Estimated Value</h3>
-					<div class="alert alert-info" id='alertInfo'>
-						<h2>???</h2>
+					<div id='estimatedValue' style="display: none;">
+						<h3>Your Estimated Value</h3>
+						<div id='estimatePrice' style="color:green;"></div>
 					</div>
-					<div class="alert alert-success" id='estimatePrice'
-						style="display: none;"></div>
 				</div>
 			</div>
 		</div>
 	</section>
-
+	<!-- More facts -->
 	<section id='factsInfo' class='services-section' style="display: none;">
 		<div class="col-md-6 col-md-offset-3">
 			<h1 class='page-header'>Other Facts</h1>
 		</div>
-		<div class="col-md-6" class="well">
-			<h3>Value Over Time</h3>
-			<div id="estimateChart"></div>
+		<div class="col-md-6 col-md-offset-3">
+			<button id='exportCSV' class="btn btn-primary">
+			<span class="glyphicon glyphicon-export"></span> Export to CSV</button>
+			<button id='exportCSV' class="btn btn-primary">
+			<span class="glyphicon glyphicon-print"></span> Export to PDF</button>
 		</div>
-		<div class="col-md-6" class="well">
+		<div class="col-md-6">
+			<h3>Value Over Time</h3>
+			<div id="estimateChart" class="well"></div>
+		</div>
+		<div class="col-md-6">
 			<h3>Neighborhood Statistics</h3>
-			<div id="areaStats"></div>
+			<div id="areaStats">
+			<div class="row col-sm-10 well" style="width:100%">
+						<table id="areaStatsTable" class="table">
+						    <thead>
+						      <tr>
+						        <th>Neighborhood</th>
+						        <th>Average Home Value</th>
+						      </tr>
+						    </thead>
+						    <tbody id='areaStatsBody'>
+						    </tbody>
+						  </table>
+		          </div>	
+			</div>
 		</div>
 	</section>
 
@@ -190,6 +208,7 @@
 		</div>
 	</div>
 
+	<!-- Scripts and other -->
 	<!-- jQuery -->
 	<script src="js/jquery-3.1.0.min.js"></script>
 
