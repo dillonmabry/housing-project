@@ -4,7 +4,7 @@
   <groupId>com.example</groupId>
   <artifactId>housing-project</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.0.0</version>
   <name>housing-project Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>

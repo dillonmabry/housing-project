@@ -16,7 +16,6 @@ html {
 
 @media(min-width:767px) {
     .navbar {
-        padding: 20px 0;
         -webkit-transition: background .5s ease-in-out,padding .5s ease-in-out;
         -moz-transition: background .5s ease-in-out,padding .5s ease-in-out;
         transition: background .5s ease-in-out,padding .5s ease-in-out;
@@ -27,29 +26,85 @@ html {
     }
 }
 
+
 /* Demo Sections - You can use these as guides or delete them - the scroller will work with any sort of height, fixed, undefined, or percentage based.
 The padding is very important to make sure the scrollspy picks up the right area when scrolled to. Adjust the margin and padding of sections and children 
 of those sections to manage the look and feel of the site. */
 
 .intro-section {
     height: 100%;
-    padding-top: 150px;
+    padding-top: 75px;
     text-align: center;
     background: #fff;
+    width:100%;
+}
+
+.main-text
+{
+    position: absolute;
+    top: 120px;
+    width: 100%;
+    color: #FFF;
+    z-index:2;
+}
+
+html,body{height:100%;}
+.carousel,.item,.active{height:100%;}
+.carousel-inner{height:100%;}
+.fill{width:100%;height:100%;background-position:center;background-size:cover;}
+
+/* faster sliding speed */
+.carousel-inner > .item {
+    -webkit-transition: 0.3s ease-in-out left;
+    -moz-transition: 0.3s ease-in-out left;
+    -o-transition: 0.3s ease-in-out left;
+    transition: 0.3s ease-in-out left;
+}
+
+/* keep full widget on smaller screens */
+@media (max-width: 767px) { 
+	body {
+		padding-left: 0;
+		padding-right: 0;
+	}
 }
 
 .about-section {
-    height: 110%;
-    padding-top: 75px;
+    height: 140%;
+    padding-top: 80px;
     text-align: center;
-    background: #eee;
+    background: #fff;
+    width:100%;
+}
+
+#areaStatsTableDiv {
+    display: inline-block;
+    overflow-y: auto;
+    max-height:400px;
+}
+
+#recentSoldTableDiv {
+	display: inline-block;
+    overflow-y: auto;
+    max-height:400px;
+}
+
+#valueTimeDiv {
+	display: inline-block;
+    max-height:400px;
 }
 
 .services-section {
     height: 100%;
-    padding-top: 75px;
     text-align: center;
-    background: #fff;
+    background: #222222;
+    width:100%;
+}
+
+.bottom-divider {
+	height: 60px;
+    background: #222222;
+    width:100%;
 }
 
 .contact-section {
@@ -57,6 +112,7 @@ of those sections to manage the look and feel of the site. */
     padding-top: 100px;
     text-align: center;
     background: #eee;
+    width:100%;
 }
 
 .modal {
@@ -77,13 +133,48 @@ of those sections to manage the look and feel of the site. */
   text-align: center;
   vertical-align: middle;
 }
-/* #loadingId { */
-/*     width: 400px; */
-/*     height: 50px; */
-/*     position: absolute; */
-/*     top: 50%; */
-/*     left: 50%; */
-/*     margin-top: -25px; */
-/*     margin-left: -200px; */
-/*     padding: 20px; */
+
+/* footer { */
+/*     position: fixed; */
+/*     height: 100px; */
+/*     bottom: 0; */
+/*     width: 100%; */
+/*     background: #eee; */
+/*     color: #eee; */
 /* } */
+
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 40px;
+      }
+      #footer {
+        background-color: #121212;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+

@@ -8,7 +8,7 @@
 <meta name="author" content="">
 <title>ITCS 3162 - Group H2</title>
 <!-- icon -->
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 
 <!-- Bootstrap Core CSS -->
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -18,6 +18,8 @@
 
 <!-- Custom CSS -->
 <link href="css/main-theme.min.css" rel="stylesheet">
+<!-- <link href="css/second-theme.min.css" rel="stylesheet"> -->
+<link href="css/toastr.min.css" rel="stylesheet">
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -33,7 +35,7 @@
 <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 	<!-- Navigation -->
-	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="padding-top:10px">
 		<div class="container">
 			<div class="navbar-header page-scroll">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -42,8 +44,8 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand page-scroll" href="#page-top">
-				Housing Price Estimator</a>
+				<a class="navbar-brand page-scroll" style="padding-bottom:50px" href="#page-top"> Housing
+					Price Estimator</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -61,32 +63,54 @@
 
 	<!-- Intro Section -->
 	<section id="intro" class="intro-section">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<h1>Estimate Housing Prices</h1>
-					<h4>
-						<strong>Usage Instructions:</strong> To estimate a price, enter
-						the corresponding inputs and click the Run Analysis button!
-					</h4>
-					<a class="btn btn-primary page-scroll" href="#estimateSection">Start
-						Estimating!</a>
-				</div>
-			</div>
-		</div>
+	    <div class="clearfix">
+	        <div class="col-md-12" style="padding: 0">
+	            <div id="carousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+	                <div class="carousel-inner" role="listbox" style=" width:100%; height: 800px !important;">
+	                    <div class="item active">
+	                        <img class="first-slide" src="img/house2.jpeg" width="100%" height="auto">
+	                    </div>
+	                    <div class="item">
+	                       <img class="first-slide" src="img/house3.jpeg" width="100%" height="auto">
+	                    </div>
+	                    <div class="item">
+	                        <img class="first-slide" src="img/house1.jpg" width="100%" height="100%">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="main-text hidden-xs">
+	                <div class="col-md-12 text-center">
+	                   <h1 style="text-shadow: 1px 2px 1px #505050  ; font-weight: 400;">Estimate 
+								Housing Prices</h1>
+							<h4 style="text-shadow: 1px 1px 1px #505050 ; font-weight: 300;">
+								<strong>Usage Instructions:</strong> 
+								For buying or selling select your choice, enter your inputs, and click Run Analysis!
+							</h4>
+							<p>
+								<a class="btn btn-primary page-scroll" style="opacity: 0.9;" href="#estimateNow">Start
+									Estimating!</a>
+							</p>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="bottom-divider"></div>
 	</section>
-
+	
 	<!-- About Section -->
+	<div id='estimateNow'></div>
 	<section id="estimateSection" class="about-section">
-		<!--     	<img src="img/ajax-loader.gif" id="ajaxImg" /> -->
 		<div class="container">
 			<div class="row">
-				<div class="col-md-6 col-md-offset-3">
+				<div class="col-md-6 col-md-offset-3"style="padding-top:60px">
+				<button class="btn btn-primary sellingBtn" id='sellingBtn'>Selling</button>
+				<button class="btn btn-primary purchaseBtn" id='purchaseBtn'>Purchasing</button>
 					<h1 class='page-header'>Estimate Price</h1>
 					<form>
 						<div class="form-group">
 							<label for="address">Street Address: </label> <input type="text"
-								class="form-control" id="address" placeholder="Enter address..." required>
+								class="form-control" id="address" placeholder="Enter address..."
+								required>
 						</div>
 						<div class="form-group">
 							<label for="city">City: </label> <input type="text"
@@ -152,61 +176,301 @@
 					<br />
 					<button id='submitBtn' type="submit" class="btn btn-primary"
 						data-toggle="modal" data-target="#loadingId">Run Analysis</button>
-					<a id="moreFacts" class="btn btn-primary page-scroll" href="#factsInfo" style="display:none;">See More Facts</a>
+<!-- 					<a  class="btn btn-primary page-scroll moreFacts" -->
+<!-- 						href="#factsInfo" style="display: none;">See More Facts</a> -->
+					<button  class="btn btn-primary moreFacts"
+						data-toggle="modal" data-target="#moreFactsModal" style="display: none;">See More Facts</button>
 					<div>
-						<br/>
-						<h4><span id='warnLabel' class="label label-default" style="display:none;">Please enter an address, city, and state!</span></h4>
+						<br />
+						<h4>
+							<span class="label label-default warnLabel"
+								style="display: none;">Please enter an address, city, and
+								state!</span>
+						</h4>
 					</div>
 					<hr />
 					<div id='estimatedValue' style="display: none;">
 						<h3>Your Estimated Value</h3>
-						<div id='estimatePrice' style="color:green;"></div>
+						<div id='estimatePrice' style="color: green;"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-	<!-- More facts -->
-	<section id='factsInfo' class='services-section' style="display: none;">
-		<div class="col-md-6 col-md-offset-3">
-			<h1 class='page-header'>Other Facts</h1>
-		</div>
-		<div class="col-md-6 col-md-offset-3">
-			<button id='exportCSV' class="btn btn-primary">
-			<span class="glyphicon glyphicon-export"></span> Export to CSV</button>
-			<button id='exportCSV' class="btn btn-primary">
-			<span class="glyphicon glyphicon-print"></span> Export to PDF</button>
-		</div>
-		<div class="col-md-6">
-			<h3>Value Over Time</h3>
-			<div id="estimateChart" class="well"></div>
-		</div>
-		<div class="col-md-6">
-			<h3>Neighborhood Statistics</h3>
-			<div id="areaStats">
-			<div class="row col-sm-10 well" style="width:100%">
-						<table id="areaStatsTable" class="table">
-						    <thead>
-						      <tr>
-						        <th>Neighborhood</th>
-						        <th>Average Home Value</th>
-						      </tr>
-						    </thead>
-						    <tbody id='areaStatsBody'>
-						    </tbody>
-						  </table>
-		          </div>	
+	<!-- Buy section -->
+	<section id="buySection" class="about-section" style="display:none;">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3" style="padding-top:60px">
+				<button class="btn btn-primary sellingBtn" >Selling</button>
+				<button class="btn btn-primary purchaseBtn" id='purchasingBtn'>Purchasing</button>
+					<h1 class='page-header'>Find Homes</h1>
+					<form>
+						<div class="form-group">
+							<label for="city">City: </label> <input type="text"
+								class="form-control" id="cityPurchase" placeholder="Enter city...">
+						</div>
+						<div class="form-group">
+							<label for="state">State: </label> <select id="statePurchase"
+								class="form-control">
+								<option value="AL">Alabama</option>
+								<option value="AK">Alaska</option>
+								<option value="AZ">Arizona</option>
+								<option value="AR">Arkansas</option>
+								<option value="CA">California</option>
+								<option value="CO">Colorado</option>
+								<option value="CT">Connecticut</option>
+								<option value="DE">Delaware</option>
+								<option value="DC">District Of Columbia</option>
+								<option value="FL">Florida</option>
+								<option value="GA">Georgia</option>
+								<option value="HI">Hawaii</option>
+								<option value="ID">Idaho</option>
+								<option value="IL">Illinois</option>
+								<option value="IN">Indiana</option>
+								<option value="IA">Iowa</option>
+								<option value="KS">Kansas</option>
+								<option value="KY">Kentucky</option>
+								<option value="LA">Louisiana</option>
+								<option value="ME">Maine</option>
+								<option value="MD">Maryland</option>
+								<option value="MA">Massachusetts</option>
+								<option value="MI">Michigan</option>
+								<option value="MN">Minnesota</option>
+								<option value="MS">Mississippi</option>
+								<option value="MO">Missouri</option>
+								<option value="MT">Montana</option>
+								<option value="NE">Nebraska</option>
+								<option value="NV">Nevada</option>
+								<option value="NH">New Hampshire</option>
+								<option value="NJ">New Jersey</option>
+								<option value="NM">New Mexico</option>
+								<option value="NY">New York</option>
+								<option value="NC" selected>North Carolina</option>
+								<option value="ND">North Dakota</option>
+								<option value="OH">Ohio</option>
+								<option value="OK">Oklahoma</option>
+								<option value="OR">Oregon</option>
+								<option value="PA">Pennsylvania</option>
+								<option value="RI">Rhode Island</option>
+								<option value="SC">South Carolina</option>
+								<option value="SD">South Dakota</option>
+								<option value="TN">Tennessee</option>
+								<option value="TX">Texas</option>
+								<option value="UT">Utah</option>
+								<option value="VT">Vermont</option>
+								<option value="VA">Virginia</option>
+								<option value="WA">Washington</option>
+								<option value="WV">West Virginia</option>
+								<option value="WI">Wisconsin</option>
+								<option value="WY">Wyoming</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="beds">Number of Bedrooms: </label>
+							<input id="bedsInputForm"  style="text-align: center;"class="form-control quantity" type="number" min="1" max="10" step="1" value="3" >
+						</div>
+						<div class="form-group">
+							<label for="baths">Number of Bathrooms: </label>
+							<input id="bathsInputForm" style="text-align: center;" class="form-control quantity" type="number" min="1" max="10" step="1" value="2">
+						</div>
+						<div class="form-group">
+							<div id="priceInputForm" data-role="rangeslider">
+						        <label for="price-min">Min Price: </label>
+						        <output for="price-min" id='minPrice'></output>
+						        <input type="range" name="price-min" id="price-min" value="50000" step="10000" min="0" max="100000" oninput="outputUpdate(value) ">
+						        <label for="price-max">Max Price: </label><div id='maxPrice'></div>
+						        <output for="price-max" id='maxPrice'></output>
+						        <input type="range" name="price-max" id="price-max" value="500000"step="10000"  min="100000" max="5000000" oninput=" outputUpdateMax(value)">
+						      </div>
+						</div>
+					</form>
+					<br />
+					<button id='submitPurchase' type="submit" class="btn btn-primary"
+						data-toggle="modal" data-target="#loadingId">Run Analysis</button>
+<!-- 					<a class="btn btn-primary page-scroll moreFacts" -->
+<!-- 						href="#factsInfo" style="display: none;">See More Facts</a> -->
+					<button  class="btn btn-primary moreFacts"
+						data-toggle="modal" data-target="#moreFactsModal" style="display: none;">See More Facts</button>
+					<div>
+						<br />
+						<h4>
+							<span class="label label-default warnLabel"
+								style="display: none;">Please enter a city, and required preferences!</span>
+						</h4>
+					</div>
+					<hr />
+					<div id='estimatedValue' style="display: none;">
+						<h3>Your Estimated Value</h3>
+						<div id='estimatePrice' style="color: green;"></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
 
-	<!-- Modal -->
+	<br/>
+	<!-- Footer -->
+	<div id="footer" class="navbar-fixed-bottom">
+<!--       <div class="container" style="margin:10px;"> -->
+<!--       	<p style="color:#fff; text-align:center">Housing Price Estimator 1.0.0 | Calculations assisted using <a target="_blank" href="http://zillow.com">Zillow</a></p> -->
+<!--       </div> -->
+    </div>
+	<!-- Loading Spinner Modal -->
 	<div class="modal fade" id="loadingId" tabindex="-1" role="dialog"
 		aria-labelledby="loadingIndicator" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<i class="fa fa-spinner fa-spin" style="font-size: 150px;"></i>
 		</div>
 	</div>
+	<!-- More Facts Modal -->
+	<div class="modal fade estimateModal" id="moreFactsModal" tabindex="-1"
+		role="dialog" aria-labelledby="moreFactsModal" aria-hidden="true">
+		<div class="modal-dialog estimateModalDialog" role="document"
+			style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h1 class="modal-title" style="text-align: center">Other Facts</h1>
+				</div>
+				<div class="modal-body">
+					<div id='factsInfo'>
+						<div class="col-md-6 col-md-offset-3">
+							<button id='exportCSV' class="btn btn-primary exportCSV" disabled>
+								<span class="glyphicon glyphicon-export"></span> Export to CSV
+							</button>
+							<button id='exportPDF' class="btn btn-primary exportPDF">
+								<span class="glyphicon glyphicon-open-file"></span> Export to Report
+							</button>
+						</div>
+						<div id="statsPanel">
+							<div class="row valueTime">
+								<div id="valueTimeDiv" class="col-md-6">
+									<h3>Property Value Over Time</h3>
+									<div id="estimateChart"></div>
+								</div>
+								<!-- 			<div id="regionValue" class="col-md-6 "> -->
+								<!-- 				<h3>Region Value Over Time</h3> -->
+								<!-- 				<div id="estimateRegion"></div> -->
+								<!-- 			</div> -->
+								<div id='distChartDiv' class='col-md-6'>
+									<h3>Housing Price Distribution</h3>
+									<div id='distChart'></div>
+								</div>
+							</div>
+							<div class="row areaRank">
+								<div class="col-md-6">
+									<h3>Top School Rankings</h3>
+									<div id="areaRanks">
+										<div id="areaRanksDiv" class="well" style="width: 100%;">
+											<table id="areaRanksTable" class="table">
+												<thead>
+													<tr>
+														<th>School Rank</th>
+														<th>School Name</th>
+														<th>Grade Level</th>
+														<th>No. of Students</th>
+													</tr>
+												</thead>
+												<tbody id='areaRanksBody'>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6 homesSale">
+									<h3>Top Homes for Sale</h3>
+									<div id="homesSale">
+										<div id="homesSaleDiv" class="well" style="width: 100%;">
+											<table id="homesSaleTable" class="table">
+												<thead>
+													<tr>
+														<th>Sold Value</th>
+														<th>No. Beds</th>
+														<th>No. Baths</th>
+														<th>URL</th>
+													</tr>
+												</thead>
+												<tbody id='homesSaleBody'>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr />
+							<div class="row">
+								<div class="col-md-6">
+									<h3>Neighborhood Statistics</h3>
+									<div id="areaStats">
+										<h4 id='areaAggregate' class="alert alert-info"
+											style="background-color: #2780e3"></h4>
+										<div id="areaStatsTableDiv" class="well" style="width: 100%;">
+											<table id="areaStatsTable" class="table">
+												<thead>
+													<tr>
+														<th>Neighborhood/Zip</th>
+														<th>Average Home Value</th>
+													</tr>
+												</thead>
+												<tbody id='areaStatsBody'>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6 crimeArea">
+									<h3>Crime/Safety Statistics</h3>
+									<div id="crimeArea">
+										<h4 id='crimeReport' class="alert alert-info"
+											style="background-color: #2780e3"></h4>
+										<div id="crimeAreaDiv" class="well" style="width: 100%;">
+											<table id="crimeTable" class="table">
+												<thead>
+													<tr>
+														<th>Safest Areas</th>
+													</tr>
+												</thead>
+												<tbody id='crimeBody'>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6 recentSold">
+									<h3>Top Recently Sold Homes</h3>
+									<div id="recentSold">
+										<div id="recentSoldTableDiv" class="well" style="width: 100%;">
+											<table id="recentSoldTable" class="table">
+												<thead>
+													<tr>
+														<th>Sold Value</th>
+														<th>No. Beds</th>
+														<th>No. Baths</th>
+													</tr>
+												</thead>
+												<tbody id='recentBody'>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- More facts -->
+			<!-- 			<section id='factsInfo' style="display: none;padding-bottom:20px"> -->
+			<!-- 			<div class="services-section" style="padding-top:80px"> -->
+			<!-- 				<div style="text-align: center;background: #eee;border-radius: 5px;" > -->
+
+			<!-- 				</div> -->
+			<!-- 			</div> -->
+			<!-- 			</section> -->
+		</div>
+	</div>
+
 
 	<!-- Scripts and other -->
 	<!-- jQuery -->
@@ -218,6 +482,10 @@
 	<!-- Scrolling Nav JavaScript -->
 	<script src="js/jquery.easing.min.js"></script>
 	<script src="js/scrolling-nav.js"></script>
+	<script src="js/toastr.min.js"></script>
+	<script src="js/raphael.min.js"></script>
+	<script src="js/morris.min.js"></script>
+	<script src="js/papaparse.min.js"></script>
 	<script src="js/common.js"></script>
 
 </body>
