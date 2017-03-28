@@ -17,6 +17,7 @@
 		$(".moreFacts").hide();
 		$("#estimatedValue").hide();
 		$("#estimateSection").show();
+		$(".allHomes").hide();
 	})
 	
 	//hide other options on click
@@ -28,46 +29,19 @@
 		$("#maxPrice").html("$"+$("#price-max").val())
 		$("#minPrice").html("$"+$("#price-min").val())
 		$("#buySection").show();
+		$(".allHomes").show();
 	})
 	//export to pdf
 	$('#exportPDF').click(function() {
 		exportPDF();
 	});
-	//export to csv
-	$(".exportCSV").click(function(){
-		$.ajax({ 
-		    type: 'POST', 
-		    url: 'Houses', 
-		    data: { oper: 'getHousesAll', 
-		    	city: $("#cityPurchase").val(),
-		    	state: $("#statePurchase").val()}, 
-		    dataType: 'text',
-		    success: function (data) {    
-		    	console.log(data);
-		    },
-		    error: function(e) {
-		    	Command: toastr["error"]("Export to CSV Error!", "Error!")
-
-		    	toastr.options = {
-		    	  "closeButton": true,
-		    	  "debug": false,
-		    	  "newestOnTop": false,
-		    	  "progressBar": false,
-		    	  "positionClass": "toast-top-right",
-		    	  "preventDuplicates": false,
-		    	  "onclick": null,
-		    	  "showDuration": "300",
-		    	  "hideDuration": "1000",
-		    	  "timeOut": "3000",
-		    	  "extendedTimeOut": "1000",
-		    	  "showEasing": "swing",
-		    	  "hideEasing": "linear",
-		    	  "showMethod": "fadeIn",
-		    	  "hideMethod": "fadeOut"
-		    	}
-		    	console.log("Error: "+JSON.stringify(e));
-		    }
-		});	
+	
+	$("#exportCSV").click(function(){
+		$("#allHomesTable").table2excel({
+			    exclude: ".noExl",
+			    name: "Worksheet Name",
+			    filename: "All Homes" 
+			  });
 	});
 	
 	function outputUpdate(num) {
@@ -356,11 +330,9 @@ $("#submitBtn").click(function(e){
 		        var found = false;
 		        for(var i=0; i < data[0].soldValues.length; i++) {
 		        	var soldItem = data[0].soldValues[i];
-		        	console.log(soldItem);
 		        	var price = soldItem.substring(soldItem.indexOf("$"),soldItem.indexOf("bds")-2);
 			        var intPrice = parseInt(soldItem.substring(soldItem.indexOf("$")+1,soldItem.indexOf("bds")-2).replace(/,/g , ""));
 			        var ahref = soldItem.substring(soldItem.lastIndexOf(",")+1,soldItem.length);
-			        console.log(ahref);
 			        if(intPrice < 25000) {
 			        	
 			        } else {
@@ -407,6 +379,66 @@ $("#submitBtn").click(function(e){
     				  "hideMethod": "fadeOut"
     				}
 		        }
+		        $('#allHomesBody').html("");
+				$.ajax({ 
+				    type: 'POST', 
+				    url: 'Houses', 
+				    data: { oper: 'getHousesSale', 
+				    	city: $("#cityPurchase").val(),
+				    	state: $("#statePurchase").val()}, 
+				    dataType: 'json',
+				    success: function (data) {    
+				    	console.log(JSON.stringify(data[0].soldValues));
+				    	 for(var i=0; i < data[0].soldValues.length; i++) {
+					        	var soldItem = data[0].soldValues[i];
+					        	var price = soldItem.substring(soldItem.indexOf("$"),soldItem.indexOf("bds")-2);
+						        var intPrice = parseInt(soldItem.substring(soldItem.indexOf("$")+1,soldItem.indexOf("bds")-2).replace(/,/g , ""));
+						        var ahref = soldItem.substring(soldItem.lastIndexOf(",")+1,soldItem.length);
+						        var address = soldItem.substring(0, soldItem.indexOf(","));
+						        if(intPrice < 25000) {
+						        } else {
+						        	var baths = soldItem.substring(soldItem.indexOf("bd")+5,soldItem.indexOf("ba")-1);
+						        	var beds = soldItem.substring(soldItem.indexOf("bd")-2,soldItem.indexOf("bd")-1);
+						        	if(!isNaN(intPrice) && !isNaN(parseInt(beds))) {
+						        		if(!(beds == "" || beds == null || beds == '' || beds == '-')) {
+							        			$('#allHomesBody').append(
+									        			 "<tr class='child'>"
+									        			 +'<td  align="left">'+price+'</td>'
+									        			 +'<td  align="left">'+beds+'</td>'
+									        			 +'<td  align="left">'+baths+'</td>'
+									        			 +'<td  align="left">'+address+'</td>'
+									        			 +'<td  align="left"><a href="'+ahref+'" target="_blank">View Home</a></td>'
+									        			 //TODO: Add link to specific property via Zillow here 
+									        			 +'</tr>');
+						        		}
+						        	}
+						        }
+						        
+					        }
+				    },
+				    error: function(e) {
+				    	Command: toastr["error"]("Error, homes not found!", "Error!")
+
+				    	toastr.options = {
+				    	  "closeButton": true,
+				    	  "debug": false,
+				    	  "newestOnTop": false,
+				    	  "progressBar": false,
+				    	  "positionClass": "toast-top-right",
+				    	  "preventDuplicates": false,
+				    	  "onclick": null,
+				    	  "showDuration": "300",
+				    	  "hideDuration": "1000",
+				    	  "timeOut": "3000",
+				    	  "extendedTimeOut": "1000",
+				    	  "showEasing": "swing",
+				    	  "hideEasing": "linear",
+				    	  "showMethod": "fadeIn",
+				    	  "hideMethod": "fadeOut"
+				    	}
+				    	console.log("Error: "+JSON.stringify(e));
+				    }
+				});	
 		    	$('#loadingId').modal('hide');
 		    },
 		    error: function(e) {

@@ -18,7 +18,6 @@
 
 <!-- Custom CSS -->
 <link href="css/main-theme.min.css" rel="stylesheet">
-<!-- <link href="css/second-theme.min.css" rel="stylesheet"> -->
 <link href="css/toastr.min.css" rel="stylesheet">
 
 <link rel="stylesheet"
@@ -336,8 +335,8 @@
 				<div class="modal-body">
 					<div id='factsInfo'>
 						<div class="col-md-6 col-md-offset-3">
-							<button id='exportCSV' class="btn btn-primary exportCSV" disabled>
-								<span class="glyphicon glyphicon-export"></span> Export to CSV
+							<button id='exportCSV' class="btn btn-primary exportCSV">
+								<span class="glyphicon glyphicon-export"></span> Export All Homes 
 							</button>
 							<button id='exportPDF' class="btn btn-primary exportPDF">
 								<span class="glyphicon glyphicon-open-file"></span> Export to Report
@@ -456,18 +455,33 @@
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-md-12 allHomes" style="display:none">
+								<hr />
+									<h3>All Homes for Sale</h3>
+									<div id="allHomes">
+										<div id="allHomesDiv" class="well" style="width: 100%;">
+											<table id="allHomesTable" class="table">
+												<thead>
+													<tr>
+														<th>Sold Value</th>
+														<th>No. Beds</th>
+														<th>No. Baths</th>
+														<th>Address</th>
+														<th>URL</th>
+													</tr>
+												</thead>
+												<tbody id='allHomesBody'>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- More facts -->
-			<!-- 			<section id='factsInfo' style="display: none;padding-bottom:20px"> -->
-			<!-- 			<div class="services-section" style="padding-top:80px"> -->
-			<!-- 				<div style="text-align: center;background: #eee;border-radius: 5px;" > -->
-
-			<!-- 				</div> -->
-			<!-- 			</div> -->
-			<!-- 			</section> -->
 		</div>
 	</div>
 
@@ -486,6 +500,7 @@
 	<script src="js/raphael.min.js"></script>
 	<script src="js/morris.min.js"></script>
 	<script src="js/papaparse.min.js"></script>
+	<script src="js/table2excel.min.js"></script>
 	<script src="js/common.js"></script>
 
 </body>

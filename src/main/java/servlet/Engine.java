@@ -47,6 +47,7 @@ public class Engine extends HttpServlet {
     public Engine() {
         super();
         date = new Date();
+        System.out.println("START - Running Engine Servlet at "+dateFormat.format(date));
         // TODO Auto-generated constructor stub
     }
 
@@ -231,7 +232,6 @@ public class Engine extends HttpServlet {
 					Elements links = document.select(".zsg-aspect-ratio-content a[href*=homedetails]");
 					for (int i=0; i < items.size(); i++) {
 						String address = items.get(i).text().substring(0, items.get(i).text().indexOf("$")-1);
-						System.out.println(address);
 						String patternAddress = items.get(i).text().substring(0, items.get(i).text().indexOf(state));
 						String subAddress = patternAddress.replace("#", "").replace(" ", "-").replace("--", "-").trim();
 						String itemInfo = items.get(i).text().substring(items.get(i).text().indexOf("$"),items.get(i).text().lastIndexOf("·"));
