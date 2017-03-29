@@ -500,7 +500,7 @@
 	<script src="js/raphael.min.js"></script>
 	<script src="js/morris.min.js"></script>
 	<script src="js/papaparse.min.js"></script>
-	<script src="js/table2excel.min.js"></script>
+	<script src="js/table2excel.js"></script>
 	<script src="js/common.js"></script>
 
 </body>
