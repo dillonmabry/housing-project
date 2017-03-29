@@ -185,6 +185,16 @@ $("#submitBtn").click(function(e){
 			        	} 
 		        	}
 		        }
+		         //validate data on client side
+		    	 $("#areaStatsBody tr td:nth-child(2)").each(function () {
+		    		 var neighborhood = $(this).closest('tr').find('td:eq(0)').text();
+		    		 var avgValue = $(this).closest('tr').find('td:eq(1)').text();
+		    		 console.log(neighborhood);
+		    		 if(neighborhood.includes("Neighborhood") || neighborhood.includes("neighborhood") ||
+		    				 neighborhood.includes("Average") || avgValue.length > 15 || !isNaN(parseInt(neighborhood))) {
+		    			 $(this).closest('tr').hide();
+		    		 }
+		    	 });
 		        
 		        var underOne = 0;
 		        var onetoTwo = 0;
@@ -323,6 +333,16 @@ $("#submitBtn").click(function(e){
 			        	}
 		        	}
 		        }
+		         //validate data on client side
+		    	 $("#areaStatsBody tr td:nth-child(2)").each(function () {
+		    		 var neighborhood = $(this).closest('tr').find('td:eq(0)').text();
+		    		 var avgValue = $(this).closest('tr').find('td:eq(1)').text();
+		    		 console.log(neighborhood);
+		    		 if(neighborhood.includes("Neighborhood") || neighborhood.includes("neighborhood") ||
+		    				 neighborhood.includes("Average") || avgValue.length > 15 || !isNaN(parseInt(neighborhood))) {
+		    			 $(this).closest('tr').hide();
+		    		 }
+		    	 });
 		      
 		        var rawAverage = sumAverageRaw/averageLength;
 		        var viewAverage = Math.round(rawAverage);
@@ -415,6 +435,16 @@ $("#submitBtn").click(function(e){
 						        }
 						        
 					        }
+				    	 //validate data on client side
+				    	 $("#allHomesBody tr td:nth-child(2)").each(function () {
+				    		 var bathElement = $(this).closest('tr').find('td:eq(2)').text();
+				    		 var bedElement = $(this).closest('tr').find('td:eq(1)').text();
+				    		 var bath = parseInt(bathElement);
+				    		 var bed = parseInt(bedElement);
+				    		 if(isNaN(bath) || isNaN(bed)) {
+				    			 $(this).closest('tr').hide();
+				    		 }
+				    	 });
 				    },
 				    error: function(e) {
 				    	Command: toastr["error"]("Error, homes not found!", "Error!")

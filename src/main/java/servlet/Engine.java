@@ -231,16 +231,21 @@ public class Engine extends HttpServlet {
 					Elements items = document.select(".zsg-aspect-ratio-content");
 					Elements links = document.select(".zsg-aspect-ratio-content a[href*=homedetails]");
 					for (int i=0; i < items.size(); i++) {
-						String address = items.get(i).text().substring(0, items.get(i).text().indexOf("$")-1);
-						String patternAddress = items.get(i).text().substring(0, items.get(i).text().indexOf(state));
-						String subAddress = patternAddress.replace("#", "").replace(" ", "-").replace("--", "-").trim();
-						String itemInfo = items.get(i).text().substring(items.get(i).text().indexOf("$"),items.get(i).text().lastIndexOf("·"));
-						
-						for(int j=0; j < links.size(); j++) {
-							if(links.get(j).toString().contains(subAddress)) {
-								String link = "https://www.zillow.com"+links.get(j).toString().substring(9,links.get(j).toString().indexOf("class")-2);
-								soldValues.append("soldValues", address+","+itemInfo+","+link);
+						try {
+							System.out.println(items.get(i).text());
+							String address = items.get(i).text().substring(0, items.get(i).text().indexOf(state)+6);
+							String patternAddress = items.get(i).text().substring(0, items.get(i).text().indexOf(state));
+							String subAddress = patternAddress.replace("#", "").replace(" ", "-").replace("--", "-").trim();
+							String itemInfo = items.get(i).text().substring(items.get(i).text().indexOf("$"),items.get(i).text().lastIndexOf("·"));
+							for(int j=0; j < links.size(); j++) {
+								if(links.get(j).toString().contains(subAddress)) {
+									String link = "https://www.zillow.com"+links.get(j).toString().substring(9,links.get(j).toString().indexOf("class")-2);
+									soldValues.append("soldValues", address+","+itemInfo+","+link);
+								}
 							}
+						} catch (StringIndexOutOfBoundsException e) {
+							System.out.println("Cleaning invalid data...");
+							continue;
 						}
 					}
 					jsonArray.put(soldValues);
