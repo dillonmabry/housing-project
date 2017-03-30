@@ -18,6 +18,7 @@
 		$("#estimatedValue").hide();
 		$("#estimateSection").show();
 		$(".allHomes").hide();
+		$(".exportExcel").hide();
 	})
 	
 	//hide other options on click
@@ -30,18 +31,19 @@
 		$("#minPrice").html("$"+$("#price-min").val())
 		$("#buySection").show();
 		$(".allHomes").show();
+		$(".exportExcel").show();
 	})
 	//export to pdf
 	$('#exportPDF').click(function() {
 		exportPDF();
 	});
 	
+	$("#exportExcel").click(function(){
+		$("#allHomesTable").table2excel({filename: "All_Homes_Excel" });
+	});
+	
 	$("#exportCSV").click(function(){
-		$("#allHomesTable").table2excel({
-			    exclude: ".noExl",
-			    name: "Worksheet Name",
-			    filename: "All Homes" 
-			  });
+		$("#allHomesTable").tableToCSV("All_Homes_CSV");
 	});
 	
 	function outputUpdate(num) {
@@ -192,7 +194,7 @@ $("#submitBtn").click(function(e){
 		    		 console.log(neighborhood);
 		    		 if(neighborhood.includes("Neighborhood") || neighborhood.includes("neighborhood") ||
 		    				 neighborhood.includes("Average") || avgValue.length > 15 || !isNaN(parseInt(neighborhood))) {
-		    			 $(this).closest('tr').hide();
+		    			 $(this).closest('tr').remove();
 		    		 }
 		    	 });
 		        
@@ -340,7 +342,7 @@ $("#submitBtn").click(function(e){
 		    		 console.log(neighborhood);
 		    		 if(neighborhood.includes("Neighborhood") || neighborhood.includes("neighborhood") ||
 		    				 neighborhood.includes("Average") || avgValue.length > 15 || !isNaN(parseInt(neighborhood))) {
-		    			 $(this).closest('tr').hide();
+		    			 $(this).closest('tr').remove();
 		    		 }
 		    	 });
 		      
@@ -442,7 +444,7 @@ $("#submitBtn").click(function(e){
 				    		 var bath = parseInt(bathElement);
 				    		 var bed = parseInt(bedElement);
 				    		 if(isNaN(bath) || isNaN(bed)) {
-				    			 $(this).closest('tr').hide();
+				    			 $(this).closest('tr').remove();
 				    		 }
 				    	 });
 				    },

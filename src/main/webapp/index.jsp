@@ -178,7 +178,7 @@
 <!-- 					<a  class="btn btn-primary page-scroll moreFacts" -->
 <!-- 						href="#factsInfo" style="display: none;">See More Facts</a> -->
 					<button  class="btn btn-primary moreFacts"
-						data-toggle="modal" data-target="#moreFactsModal" style="display: none;">See More Facts</button>
+						data-toggle="modal" data-target="#moreFactsModal" style="display: none;">View Results</button>
 					<div>
 						<br />
 						<h4>
@@ -290,7 +290,7 @@
 <!-- 					<a class="btn btn-primary page-scroll moreFacts" -->
 <!-- 						href="#factsInfo" style="display: none;">See More Facts</a> -->
 					<button  class="btn btn-primary moreFacts"
-						data-toggle="modal" data-target="#moreFactsModal" style="display: none;">See More Facts</button>
+						data-toggle="modal" data-target="#moreFactsModal" style="display: none;">View Results</button>
 					<div>
 						<br />
 						<h4>
@@ -336,10 +336,13 @@
 					<div id='factsInfo'>
 						<div class="col-md-6 col-md-offset-3">
 							<button id='exportCSV' class="btn btn-primary exportCSV">
-								<span class="glyphicon glyphicon-export"></span> Export All Homes 
+								<span class="glyphicon glyphicon-export"></span> Export All CSV
+							</button>
+							<button id='exportExcel' class="btn btn-primary exportExcel" style="display:none">
+								<span class="glyphicon glyphicon-th-list"></span> Export All Excel
 							</button>
 							<button id='exportPDF' class="btn btn-primary exportPDF">
-								<span class="glyphicon glyphicon-open-file"></span> Export to Report
+								<span class="glyphicon glyphicon-open-file"></span> Export Report
 							</button>
 						</div>
 						<div id="statsPanel">
@@ -501,6 +504,7 @@
 	<script src="js/morris.min.js"></script>
 	<script src="js/papaparse.min.js"></script>
 	<script src="js/table2excel.js"></script>
+	<script src="js/table2csv.js"></script>
 	<script src="js/common.js"></script>
 
 </body>
