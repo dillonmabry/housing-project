@@ -381,7 +381,7 @@
 									</div>
 								</div>
 								<div class="col-md-6 homesSale">
-									<h3>Top Homes for Sale</h3>
+									<h3>Search Results</h3>
 									<div id="homesSale">
 										<div id="homesSaleDiv" class="well" style="width: 100%;">
 											<table id="homesSaleTable" class="table">
@@ -461,7 +461,7 @@
 							<div class="row">
 								<div class="col-md-12 allHomes" style="display:none">
 								<hr />
-									<h3>All Homes for Sale</h3>
+									<h3>Most Recent Homes for Sale</h3>
 									<div id="allHomes">
 										<div id="allHomesDiv" class="well" style="width: 100%;">
 											<table id="allHomesTable" class="table">
