@@ -102,9 +102,10 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3"style="padding-top:60px">
-				<button class="btn btn-primary sellingBtn" id='sellingBtn'>Selling</button>
-				<button class="btn btn-primary purchaseBtn" id='purchaseBtn'>Purchasing</button>
-					<h1 class='page-header'>Estimate Price</h1>
+				<button class="btn btn-primary sellingBtn" >Zestimate</button>
+				<button class="btn btn-default purchaseBtn" id='purchasingBtn'>Purchasing</button>
+				<button class="btn btn-default regBtn" id='regBtn'>Estimate</button>
+					<h1 class='page-header'>Zestimate Price</h1>
 					<form>
 						<div class="form-group">
 							<label for="address">Street Address: </label> <input type="text"
@@ -183,8 +184,7 @@
 						<br />
 						<h4>
 							<span class="label label-default warnLabel"
-								style="display: none;">Please enter an address, city, and
-								state!</span>
+								style="display: none;">Please enter all required preferences!</span>
 						</h4>
 					</div>
 					<hr />
@@ -201,8 +201,9 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3" style="padding-top:60px">
-				<button class="btn btn-primary sellingBtn" >Selling</button>
+				<button class="btn btn-primary sellingBtn" >Zestimate</button>
 				<button class="btn btn-primary purchaseBtn" id='purchasingBtn'>Purchasing</button>
+				<button class="btn btn-primary regBtn" id='regBtn'>Estimate</button>
 					<h1 class='page-header'>Find Homes</h1>
 					<form>
 						<div class="form-group">
@@ -295,13 +296,119 @@
 						<br />
 						<h4>
 							<span class="label label-default warnLabel"
-								style="display: none;">Please enter a city, and required preferences!</span>
+								style="display: none;">Please enter all required preferences!</span>
 						</h4>
 					</div>
 					<hr />
 					<div id='estimatedValue' style="display: none;">
 						<h3>Your Estimated Value</h3>
 						<div id='estimatePrice' style="color: green;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Buy section -->
+	<section id="estimatePriceReg" class="about-section" style="display:none;">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3" style="padding-top:60px">
+				<button class="btn btn-primary sellingBtn">Zestimate</button>
+				<button class="btn btn-primary purchaseBtn" id='purchasingBtn'>Purchasing</button>
+				<button class="btn btn-primary regBtn" id='regBtn'>Estimate</button>
+					<h1 class='page-header'>Estimate Price</h1>
+					<form>
+						<div class="form-group">
+							<label for="city">City: </label> <input type="text"
+								class="form-control" id="cityReg" placeholder="Enter city...">
+						</div>
+						<div class="form-group">
+							<label for="state">State: </label> <select id="stateReg"
+								class="form-control">
+								<option value="AL">Alabama</option>
+								<option value="AK">Alaska</option>
+								<option value="AZ">Arizona</option>
+								<option value="AR">Arkansas</option>
+								<option value="CA">California</option>
+								<option value="CO">Colorado</option>
+								<option value="CT">Connecticut</option>
+								<option value="DE">Delaware</option>
+								<option value="DC">District Of Columbia</option>
+								<option value="FL">Florida</option>
+								<option value="GA">Georgia</option>
+								<option value="HI">Hawaii</option>
+								<option value="ID">Idaho</option>
+								<option value="IL">Illinois</option>
+								<option value="IN">Indiana</option>
+								<option value="IA">Iowa</option>
+								<option value="KS">Kansas</option>
+								<option value="KY">Kentucky</option>
+								<option value="LA">Louisiana</option>
+								<option value="ME">Maine</option>
+								<option value="MD">Maryland</option>
+								<option value="MA">Massachusetts</option>
+								<option value="MI">Michigan</option>
+								<option value="MN">Minnesota</option>
+								<option value="MS">Mississippi</option>
+								<option value="MO">Missouri</option>
+								<option value="MT">Montana</option>
+								<option value="NE">Nebraska</option>
+								<option value="NV">Nevada</option>
+								<option value="NH">New Hampshire</option>
+								<option value="NJ">New Jersey</option>
+								<option value="NM">New Mexico</option>
+								<option value="NY">New York</option>
+								<option value="NC" selected>North Carolina</option>
+								<option value="ND">North Dakota</option>
+								<option value="OH">Ohio</option>
+								<option value="OK">Oklahoma</option>
+								<option value="OR">Oregon</option>
+								<option value="PA">Pennsylvania</option>
+								<option value="RI">Rhode Island</option>
+								<option value="SC">South Carolina</option>
+								<option value="SD">South Dakota</option>
+								<option value="TN">Tennessee</option>
+								<option value="TX">Texas</option>
+								<option value="UT">Utah</option>
+								<option value="VT">Vermont</option>
+								<option value="VA">Virginia</option>
+								<option value="WA">Washington</option>
+								<option value="WV">West Virginia</option>
+								<option value="WI">Wisconsin</option>
+								<option value="WY">Wyoming</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="beds">Number of Bedrooms: </label>
+							<input id="bedsReg"  style="text-align: center;"class="form-control quantity" type="number" min="1" max="10" step="1" value="3" >
+						</div>
+						<div class="form-group">
+							<label for="baths">Number of Bathrooms: </label>
+							<input id="bathsReg" style="text-align: center;" class="form-control quantity" type="number" min="1" max="10" step="1" value="2">
+						</div>
+						<div class="form-group">
+							<label for="sqft">Square Footage: </label>
+							<input id="sqftReg" style="text-align: center;" class="form-control quantity" type="number" min="500" max="20000" step="250" value="1500">
+						</div>
+					</form>
+					<br />
+					<button id='submitReg' type="submit" class="btn btn-primary"
+						data-toggle="modal" data-target="#loadingId">Run Analysis</button>
+<!-- 					<a class="btn btn-primary page-scroll moreFacts" -->
+<!-- 						href="#factsInfo" style="display: none;">See More Facts</a> -->
+					<button  class="btn btn-primary moreFacts"
+						data-toggle="modal" data-target="#moreFactsModal" style="display: none;">View Results</button>
+					<div>
+						<br />
+						<h4>
+							<span class="label label-default warnLabel"
+								style="display: none;">Please enter all required preferences!</span>
+						</h4>
+					</div>
+					<hr />
+					<div class="estimatedValue" style="display: none;">
+						<h3>Your Estimated Value</h3>
+						<div class="estimatePrice" style="color: green;"></div>
 					</div>
 				</div>
 			</div>
@@ -401,7 +508,7 @@
 								</div>
 							</div>
 							<hr />
-							<div class="row">
+							<div class="row neighborStats">
 								<div class="col-md-6">
 									<h3>Neighborhood Statistics</h3>
 									<div id="areaStats">
@@ -487,7 +594,6 @@
 			</div>
 		</div>
 	</div>
-
 
 	<!-- Scripts and other -->
 	<!-- jQuery -->

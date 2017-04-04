@@ -12,10 +12,16 @@
 
 	//hide other options on click
 	$(".sellingBtn").click(function(){
+		$('.regBtn').removeClass('btn-primary').addClass('btn-default');
+		$('.purchaseBtn').removeClass('btn-primary').addClass('btn-default');
+		$('.sellingBtn').removeClass('btn-default').addClass('btn-primary');
 		$("#buySection").hide();
+		$(".regFacts").hide();
+		$("#estimatePriceReg").hide();
 		$("#factsInfo").hide();
 		$(".moreFacts").hide();
 		$("#estimatedValue").hide();
+		$(".estimatedValue").hide();
 		$("#estimateSection").show();
 		$(".allHomes").hide();
 		$(".exportExcel").hide();
@@ -23,9 +29,15 @@
 	
 	//hide other options on click
 	$(".purchaseBtn").click(function(){
+		$('.regBtn').removeClass('btn-primary').addClass('btn-default');
+		$('.sellingBtn').removeClass('btn-primary').addClass('btn-default');
+		$('.purchaseBtn').removeClass('btn-default').addClass('btn-primary');
 		$("#estimateSection").hide();
+		$(".regFacts").hide();
+		$("#estimatePriceReg").hide();
 		$("#factsInfo").hide();
 		$("#estimatedValue").hide();
+		$(".estimatedValue").hide();
 		$(".moreFacts").hide();
 		$("#maxPrice").html("$"+$("#price-max").val())
 		$("#minPrice").html("$"+$("#price-min").val())
@@ -33,6 +45,22 @@
 		$(".allHomes").show();
 		$(".exportExcel").show();
 	})
+	
+	$(".regBtn").click(function() {
+		$('.purchaseBtn').removeClass('btn-primary').addClass('btn-default');
+		$('.sellingBtn').removeClass('btn-primary').addClass('btn-default');
+		$('.regBtn').removeClass('btn-default').addClass('btn-primary');
+		$("#estimatePriceReg").show();
+		$(".regFacts").hide();
+		$("#estimateSection").hide();
+		$("#factsInfo").hide();
+		$("#estimatedValue").hide();
+		$(".moreFacts").hide();
+		$("#buySection").hide();
+		$(".allHomes").hide();
+		$(".exportExcel").hide();
+	});
+	
 	//export to pdf
 	$('#exportPDF').click(function() {
 		exportPDF();
@@ -572,7 +600,46 @@ $("#submitBtn").click(function(e){
 		    }
 		});	
 		
-	})
+	});
+	
+	/*--------- Linear Regression Submit ----------*/
+	$("#submitReg").click(function(e) {
+		if($("#bedsReg").val() == "" ||
+ 			   $("#cityReg").val() =="" ||
+ 			   $("#stateReg").val() == "" ||
+ 			   $("#bathsReg").val() == "" ||
+ 			   $("#sqftReg").val() == "") {
+ 				$(".warnLabel").fadeIn(200);
+ 				e.preventDefault();
+ 				return false;
+		}
+		$(".warnLabel").hide();
+		$.ajax({ 
+		    type: 'POST', 
+		    url: 'Houses', 
+		    data: { oper: 'buildStats', 
+		    	city: $("#cityReg").val(),
+		    	state: $("#stateReg").val(),
+		    	beds: $("#bedsReg").val(),
+		    	baths: $("#bathsReg").val(),
+		    	sqft: $("#sqftReg").val()}, 
+		    dataType: 'json',
+		    success: function (data) {    	
+		    	console.log(JSON.stringify(data.modelStats[2]));
+		    	$(".estimatedValue").fadeIn(500);
+		    	$(".estimatedValue").offset().top - 10;
+		    	var value = parseInt(data.modelStats[2]);
+		    	$(".estimatePrice").html("<h1 style='font-weight:400'>$"+value.toLocaleString()+"</h1>");
+		    	//$("#modelSummary").html(data.modelStats[1]);
+		    	$('#loadingId').modal('hide');
+		    	$(".warnLabel").hide();
+		    },
+		    error: function(e) {
+		    	$('#loadingId').modal('hide');
+		    	console.log("Error: "+JSON.stringify(e));
+		    }
+		});	
+	});
 
 	/* Convert JSON to CSF */
 	function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {

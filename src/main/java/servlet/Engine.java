@@ -1,9 +1,11 @@
 package servlet;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.DateFormat;
@@ -32,6 +34,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
+
+import weka.associations.Apriori;
+import weka.classifiers.functions.LinearRegression;
+import weka.clusterers.EM;
+import weka.core.Attribute;
+import weka.core.FastVector;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.converters.CSVLoader;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.NumericToNominal;
 /**
  * Servlet implementation class Engine
  */
@@ -100,10 +113,10 @@ public class Engine extends HttpServlet {
 					String outputResult = "";
 					for (int i=0; i < price.size()-2; i++) {
 						outputResult += address.get(i).text() + "," + price.get(i).text()+"\n";
-						System.out.println(address.get(i).text() + "," + price.get(i).text());
+						//System.out.println(address.get(i).text() + "," + price.get(i).text());
 					}
 					for (int j=0; j < ahref.size(); j++) {
-						System.out.println(ahref.get(j).toString().substring(9,ahref.get(j).toString().indexOf("class")-2));
+						//System.out.println(ahref.get(j).toString().substring(9,ahref.get(j).toString().indexOf("class")-2));
 					}
 					//TODO: contact with another loop for ahref
 				    response.getWriter().write(outputResult);
@@ -232,7 +245,7 @@ public class Engine extends HttpServlet {
 					Elements links = document.select(".zsg-aspect-ratio-content a[href*=homedetails]");
 					for (int i=0; i < items.size(); i++) {
 						try {
-							System.out.println(items.get(i).text());
+							//System.out.println(items.get(i).text());
 							String address = items.get(i).text().substring(0, items.get(i).text().indexOf(state)+6);
 							String patternAddress = items.get(i).text().substring(0, items.get(i).text().indexOf(state));
 							String subAddress = patternAddress.replace("#", "").replace(" ", "-").replace("--", "-").trim();
@@ -348,9 +361,184 @@ public class Engine extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		} else if(request.getParameter("oper").equals("buildStats")) {
+			//get request
+			String city = request.getParameter("city");
+			String state = request.getParameter("state");
+			Document document;
+			//write to temp csv file
+			File csvFile = File.createTempFile("output",".csv");
+			PrintWriter pw = new PrintWriter(csvFile);
+		    StringBuilder sb = new StringBuilder();
+		    //build headers
+		    sb.append("Price");
+			sb.append(",");
+			sb.append("Beds");
+			sb.append(",");
+			sb.append("Baths");
+			sb.append(",");
+			sb.append("Sqft");
+			sb.append("\n");
+		        
+			try {
+				//Get Document object after parsing the html from given url.
+				String url = "https://www.zillow.com/"+city+"-"+state+"/for-sale/";
+				//System.out.println(url);
+				Connection.Response responseSoup = Jsoup.connect(url)
+				        .userAgent("Mozilla/5.0")
+				        .timeout(0).execute();
+				int statusCode = responseSoup.statusCode();
+				if(statusCode == 200){
+					//Get Document object after parsing the html from given url.
+					document = Jsoup.connect(url).get();
+					
+					Elements price = document.select(".zsg-photo-card-price:contains($)"); //Get price	
+					Elements items = document.select(".zsg-aspect-ratio-content");
+					Elements links = document.select(".zsg-aspect-ratio-content a[href*=homedetails]");
+					for (int i=0; i < items.size(); i++) {
+						try {
+							//System.out.println(items.get(i).text());
+							String address = items.get(i).text().substring(0, items.get(i).text().indexOf(state)+6);
+							String patternAddress = items.get(i).text().substring(0, items.get(i).text().indexOf(state));
+							String subAddress = patternAddress.replace("#", "").replace(" ", "-").replace("--", "-").trim();
+							String itemInfo = items.get(i).text().substring(items.get(i).text().indexOf("$"),items.get(i).text().lastIndexOf("·"));
+							String itemPrice = itemInfo.substring(1, itemInfo.indexOf("bd")-2).replaceAll(",", "").replaceAll("\\+", "").replaceAll("·", "");							
+							String beds = itemInfo.substring(itemInfo.indexOf("bd")-2,itemInfo.indexOf("bd"));
+							String baths = itemInfo.substring(itemInfo.indexOf("ba")-2,itemInfo.indexOf("ba"));
+							String sqft = itemInfo.substring(itemInfo.indexOf("sqft")-6, itemInfo.indexOf("sqft")-1).replaceAll(",", "");
+							for(int j=0; j < links.size(); j++) {
+								if(links.get(j).toString().contains(subAddress)) {
+									sb.append(Double.valueOf(itemPrice.replaceAll("K", "000")));
+									sb.append(",");
+									sb.append(Double.valueOf(beds));
+									sb.append(",");
+									sb.append(Double.valueOf(baths));
+									sb.append(",");
+									sb.append(Double.valueOf(sqft.replaceAll("·", "")));
+									sb.append('\n');
+								}
+							}
+						} catch (StringIndexOutOfBoundsException e) {
+							System.out.println("Cleaning invalid data...");
+							continue;
+						}
+					}
+				}			
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println(sb.toString());
+			pw.write(sb.toString());
+	        pw.close();
+			
+	        JSONObject responseOut = new JSONObject();
+	        //load CSV file (needs to have numeric data ONLY, i.g. sold value, beds, baths attributes)
+			CSVLoader loader = new CSVLoader();
+			loader.setSource(csvFile);
+			Instances trainSet = loader.getDataSet();
+
+			double beds = Double.valueOf(request.getParameter("beds"));
+			double baths = Double.valueOf(request.getParameter("baths"));
+			double sqft = Double.valueOf(request.getParameter("sqft"));
+			
+			try {
+				EM cluster = buildCluster(trainSet);
+				responseOut.append("modelStats", cluster.toString());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try{
+				//start Linear Regression 
+				trainSet.setClassIndex(0);
+				LinearRegression lr = buildRegression(trainSet);
+				responseOut.append("modelStats", lr.toString());
+				//create attributes
+				FastVector atts = new FastVector(3);
+				//make class attribute
+				Attribute classIndex = new Attribute("price");
+				atts.addElement(classIndex);
+				atts.addElement(new Attribute("beds"));
+				atts.addElement(new Attribute("baths"));
+				atts.addElement(new Attribute("sqft"));
+				//create instances for attributes
+				Instances instances = new Instances("My Instances", atts, 0);
+				instances.setClass(classIndex);
+				//create single instance
+				Instance inst = new Instance(4);
+				inst.setDataset(instances);
+				inst.setValue(1, beds);
+				inst.setValue(2, baths);
+				inst.setValue(3, sqft);
+				//add single instance to instances collection
+				instances.add(inst);
+				//classify instance here
+				int estimateValue = Integer.valueOf((int) lr.classifyInstance(inst));
+				System.out.println(lr.toString());
+				responseOut.append("modelStats", String.valueOf(estimateValue)); 
+				response.getWriter().write(responseOut.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 		
 		
+	}
+	
+	/**
+	 * Builds Apriori association
+	 * @param data
+	 * @throws Exception
+	 */
+	private static Apriori buildAssociation(Instances data) throws Exception {
+		NumericToNominal convert= new NumericToNominal();
+        String[] options= new String[2];
+        options[0]="-R";
+        options[1]="1-3";  //range of variables to make numeric
+
+        convert.setOptions(options);
+        convert.setInputFormat(data);
+
+        Instances newData=Filter.useFilter(data, convert);
+
+		newData.setClassIndex(newData.numAttributes() - 1);
+		
+		// build associator
+		Apriori apriori = new Apriori();
+		apriori.setClassIndex(newData.classIndex());
+		
+		apriori.buildAssociations(newData);
+		return apriori;
+	}
+	
+	/**
+	 * Builds linear regression model
+	 * @param data
+	 * @return
+	 * @throws Exception
+	 */
+	private static LinearRegression buildRegression(Instances data) throws Exception {
+		LinearRegression lr = new LinearRegression();
+		lr.buildClassifier(data);
+		//TODO: classify an instance
+		return lr;
+	}
+	
+	/**
+	 * Builds basic EM cluster
+	 * @param data
+	 * @return
+	 * @throws Exception
+	 */
+	private static EM buildCluster(Instances data) throws Exception {
+		String[] options = new String[2];
+		options[0] = "-I";
+		options[1] = "100";
+		EM clusterer = new EM();
+		clusterer.setOptions(options);
+		clusterer.buildClusterer(data);
+		return clusterer;
 	}
 
 }
