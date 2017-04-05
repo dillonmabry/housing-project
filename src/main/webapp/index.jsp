@@ -457,10 +457,6 @@
 									<h3>Property Value Over Time</h3>
 									<div id="estimateChart"></div>
 								</div>
-								<!-- 			<div id="regionValue" class="col-md-6 "> -->
-								<!-- 				<h3>Region Value Over Time</h3> -->
-								<!-- 				<div id="estimateRegion"></div> -->
-								<!-- 			</div> -->
 								<div id='distChartDiv' class='col-md-6'>
 									<h3>Housing Price Distribution</h3>
 									<div id='distChart'></div>

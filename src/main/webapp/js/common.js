@@ -10,7 +10,7 @@
 	   console.log(error);
 	});
 
-	//hide other options on click
+	//hide other options on click button
 	$(".sellingBtn").click(function(){
 		$('.regBtn').removeClass('btn-primary').addClass('btn-default');
 		$('.purchaseBtn').removeClass('btn-primary').addClass('btn-default');

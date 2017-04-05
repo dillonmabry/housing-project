@@ -1,5 +1,4 @@
-
-
+package servlet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,12 +34,12 @@ public class FileModule extends HttpServlet {
 		response.setContentType("text/html");  
 		PrintWriter out = response.getWriter();  
 		try {
-			URL url = getServletContext().getResource("output.txt");
+			String url = getServletContext().getRealPath("/")+"output.txt";
 			System.out.println(url);
-			File file = new File(url.getPath());
+			File file = new File(url);
 			response.setContentType("APPLICATION/OCTET-STREAM");   
 			response.setHeader("Content-Disposition","attachment; filename=\"" + file + "\"");   
-			  
+			
 			FileInputStream fileInputStream = new FileInputStream(file);  
 			            
 			int i;   
@@ -58,6 +57,7 @@ public class FileModule extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 *
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
