@@ -1,10 +1,17 @@
 package servlet;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -21,7 +28,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
@@ -369,8 +379,7 @@ public class Engine extends HttpServlet {
 			sb.append(",");
 			sb.append("Sqft");
 			sb.append("\n");
-			PrintWriter outWrite = new PrintWriter(getServletContext().getRealPath("/")+"output.txt");
-			
+		        
 			try {
 				//Get Document object after parsing the html from given url.
 				String url = "https://www.zillow.com/"+city+"-"+state+"/for-sale/";
@@ -435,7 +444,6 @@ public class Engine extends HttpServlet {
 			try {
 				EM cluster = buildCluster(trainSet);
 				responseOut.append("modelStats", cluster.toString());
-				outWrite.println(cluster.toString());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -468,14 +476,7 @@ public class Engine extends HttpServlet {
 				int estimateValue = Integer.valueOf((int) lr.classifyInstance(inst));
 				System.out.println(lr.toString());
 				responseOut.append("modelStats", String.valueOf(estimateValue)); 
-				outWrite.println("===================================");
-				outWrite.println(lr.toString());
-				outWrite.println("===================================");
-				outWrite.println("Estimate Price: "+estimateValue);
-				outWrite.close();
-				
 				response.getWriter().write(responseOut.toString());
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

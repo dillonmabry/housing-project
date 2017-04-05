@@ -17,7 +17,6 @@
 		$('.sellingBtn').removeClass('btn-default').addClass('btn-primary');
 		$("#buySection").hide();
 		$(".regFacts").hide();
-		$("#downloadBtn").hide();
 		$("#estimatePriceReg").hide();
 		$("#factsInfo").hide();
 		$(".moreFacts").hide();
@@ -37,7 +36,6 @@
 		$(".regFacts").hide();
 		$("#estimatePriceReg").hide();
 		$("#factsInfo").hide();
-		$("#downloadBtn").hide();
 		$("#estimatedValue").hide();
 		$(".estimatedValue").hide();
 		$(".moreFacts").hide();
@@ -60,7 +58,6 @@
 		$(".moreFacts").hide();
 		$("#buySection").hide();
 		$(".allHomes").hide();
-		$("#downloadBtn").hide();
 		$(".exportExcel").hide();
 	});
 	
@@ -633,7 +630,7 @@ $("#submitBtn").click(function(e){
 		    	$(".estimatedValue").offset().top - 10;
 		    	var value = parseInt(data.modelStats[2]);
 		    	$(".estimatePrice").html("<h1 style='font-weight:400'>$"+value.toLocaleString()+"</h1>");
-		    	$("#downloadBtn").show();
+		    	//$("#modelSummary").html(data.modelStats[1]);
 		    	$('#loadingId').modal('hide');
 		    	$(".warnLabel").hide();
 		    },
@@ -643,7 +640,7 @@ $("#submitBtn").click(function(e){
 		    }
 		});	
 	});
-	
+
 	/* Convert JSON to CSF */
 	function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
 	    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
