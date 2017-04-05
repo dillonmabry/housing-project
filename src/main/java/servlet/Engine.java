@@ -388,7 +388,7 @@ public class Engine extends HttpServlet {
 					Elements links = document.select(".zsg-aspect-ratio-content a[href*=homedetails]");
 					for (int i=0; i < items.size(); i++) {
 						try {
-							//System.out.println(items.get(i).text());
+							System.out.println(items.get(i).text());
 							String address = items.get(i).text().substring(0, items.get(i).text().indexOf(state)+6);
 							String patternAddress = items.get(i).text().substring(0, items.get(i).text().indexOf(state));
 							String subAddress = patternAddress.replace("#", "").replace(" ", "-").replace("--", "-").trim();
@@ -399,20 +399,40 @@ public class Engine extends HttpServlet {
 							String sqft = itemInfo.substring(itemInfo.indexOf("sqft")-6, itemInfo.indexOf("sqft")-1).replaceAll(",", "");
 							for(int j=0; j < links.size(); j++) {
 								if(links.get(j).toString().contains(subAddress)) {
-									sb.append(Double.valueOf(itemPrice.replaceAll("K", "000")));
+									try {
+										sb.append(Double.valueOf(itemPrice.replaceAll("K", "000")));
+									} catch (NumberFormatException e) {
+										System.out.println("Cleaning invalid data...");
+										sb.append(190000); //just replace with avg value of homes in U.S.
+									}
 									sb.append(",");
-									sb.append(Double.valueOf(beds));
+									try {
+										sb.append(Double.valueOf(beds));
+									} catch (NumberFormatException e) {
+										System.out.println("Cleaning invalid data...");
+										sb.append(3); //just replace with avg value of beds in U.S.
+									}
 									sb.append(",");
-									sb.append(Double.valueOf(baths));
+									try {
+										sb.append(Double.valueOf(baths));
+									} catch (NumberFormatException e) {
+										System.out.println("Cleaning invalid data...");
+										sb.append(2); //just replace with avg value of baths in U.S.
+									}
 									sb.append(",");
-									sb.append(Double.valueOf(sqft.replaceAll("·", "")));
+									try {
+										sb.append(Double.valueOf(sqft.replaceAll("·", "")));
+									} catch (NumberFormatException e) {
+										System.out.println("Cleaning invalid data...");
+										sb.append(2000.00); //just replace with avg sqft of homes in U.S.
+									}
 									sb.append('\n');
 								}
 							}
 						} catch (StringIndexOutOfBoundsException e) {
 							System.out.println("Cleaning invalid data...");
 							continue;
-						}
+						} 
 					}
 				}			
 			} catch (IOException e) {
@@ -478,6 +498,7 @@ public class Engine extends HttpServlet {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
+				response.getWriter().write("Error! Wrong input specified or server error!");
 			}
 			
 		}
@@ -529,7 +550,6 @@ public class Engine extends HttpServlet {
 	 * @param data
 	 * @return
 	 * @throws Exception
-	 *
 	 */
 	private static EM buildCluster(Instances data) throws Exception {
 		String[] options = new String[2];

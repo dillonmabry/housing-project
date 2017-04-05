@@ -1,7 +1,7 @@
 	getVersion().done(function(manifestVersion) {
 	    $("#footer").html(
-				'<div class="container" style="margin:10px;">'
-		      	+'<p style="color:#fff; text-align:center">'
+				'<div class="container">'
+		      	+'<p style="color:#fff; text-align:center; margin:10px">'
 		      	+'Housing Price Estimator '+manifestVersion+' | Calculations assisted using <a target="_blank" href="http://zillow.com">Zillow</a></p>'
 		      	+'</div>'
 		
@@ -10,7 +10,7 @@
 	   console.log(error);
 	});
 
-	//hide other options on click button
+	//hide other options on click
 	$(".sellingBtn").click(function(){
 		$('.regBtn').removeClass('btn-primary').addClass('btn-default');
 		$('.purchaseBtn').removeClass('btn-primary').addClass('btn-default');
@@ -639,6 +639,26 @@ $("#submitBtn").click(function(e){
 		    },
 		    error: function(e) {
 		    	$('#loadingId').modal('hide');
+		    	console.log("Error: "+JSON.stringify(e));
+		    	Command: toastr["error"]("Cannot find city specified or runtime server error!", "Error!")
+
+		    	toastr.options = {
+		    	  "closeButton": true,
+		    	  "debug": false,
+		    	  "newestOnTop": false,
+		    	  "progressBar": false,
+		    	  "positionClass": "toast-top-right",
+		    	  "preventDuplicates": false,
+		    	  "onclick": null,
+		    	  "showDuration": "300",
+		    	  "hideDuration": "1000",
+		    	  "timeOut": "3000",
+		    	  "extendedTimeOut": "1000",
+		    	  "showEasing": "swing",
+		    	  "hideEasing": "linear",
+		    	  "showMethod": "fadeIn",
+		    	  "hideMethod": "fadeOut"
+		    	}
 		    	console.log("Error: "+JSON.stringify(e));
 		    }
 		});	

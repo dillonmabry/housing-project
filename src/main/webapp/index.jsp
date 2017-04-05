@@ -423,7 +423,7 @@
     </div>
 	<!-- Loading Spinner Modal -->
 	<div class="modal fade" id="loadingId" tabindex="-1" role="dialog"
-		aria-labelledby="loadingIndicator" aria-hidden="true">
+		aria-labelledby="loadingIndicator" aria-hidden="true" data-backdrop="static" data-keyboard="false"> 
 		<div class="modal-dialog" role="document">
 			<i class="fa fa-spinner fa-spin" style="font-size: 150px;"></i>
 		</div>
@@ -432,7 +432,7 @@
 	<div class="modal fade estimateModal" id="moreFactsModal" tabindex="-1"
 		role="dialog" aria-labelledby="moreFactsModal" aria-hidden="true">
 		<div class="modal-dialog estimateModalDialog" role="document"
-			style="width: 80%;">
+			style="width: 95%;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -457,6 +457,10 @@
 									<h3>Property Value Over Time</h3>
 									<div id="estimateChart"></div>
 								</div>
+								<!-- 			<div id="regionValue" class="col-md-6 "> -->
+								<!-- 				<h3>Region Value Over Time</h3> -->
+								<!-- 				<div id="estimateRegion"></div> -->
+								<!-- 			</div> -->
 								<div id='distChartDiv' class='col-md-6'>
 									<h3>Housing Price Distribution</h3>
 									<div id='distChart'></div>
