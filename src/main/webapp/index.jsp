@@ -388,14 +388,13 @@
 						</div>
 						<div class="form-group">
 							<label for="sqft">Square Footage: </label>
-							<input id="sqftReg" style="text-align: center;" class="form-control quantity" type="number" min="500" max="20000" step="250" value="1500">
+							<input id="sqftReg" style="text-align: center;" class="form-control quantity" type="number" min="500" max="20000" step="250" value="2000">
 						</div>
 					</form>
 					<br />
 					<button id='submitReg' type="submit" class="btn btn-primary"
 						data-toggle="modal" data-target="#loadingId">Run Analysis</button>
-<!-- 					<a class="btn btn-primary page-scroll moreFacts" -->
-<!-- 						href="#factsInfo" style="display: none;">See More Facts</a> -->
+					<a id="downloadBtn" style="display:none" href="FileModule"><button class="btn btn-primary">Download Results</button></a>
 					<button  class="btn btn-primary moreFacts"
 						data-toggle="modal" data-target="#moreFactsModal" style="display: none;">View Results</button>
 					<div>
