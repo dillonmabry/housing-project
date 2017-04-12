@@ -26,6 +26,7 @@
 		$("#estimateSection").show();
 		$(".allHomes").hide();
 		$(".exportExcel").hide();
+		$("#homesMaps").hide();
 	})
 	
 	//hide other options on click
@@ -46,6 +47,7 @@
 		$("#buySection").show();
 		$(".allHomes").show();
 		$(".exportExcel").show();
+		$("#homesMaps").hide();
 	})
 	
 	$(".regBtn").click(function() {
@@ -402,7 +404,6 @@ $("#submitBtn").click(function(e){
 						        			 +'<td  align="left">'+beds+'</td>'
 						        			 +'<td  align="left">'+baths+'</td>'
 						        			 +'<td  align="left"><a href="'+ahref+'" target="_blank">View Home</a></td>'
-						        			 //TODO: Add link to specific property via Zillow here 
 						        			 +'</tr>');
 				        			found = true;
 				        		}
@@ -461,7 +462,6 @@ $("#submitBtn").click(function(e){
 									        			 +'<td  align="left">'+baths+'</td>'
 									        			 +'<td  align="left">'+address+'</td>'
 									        			 +'<td  align="left"><a href="'+ahref+'" target="_blank">View Home</a></td>'
-									        			 //TODO: Add link to specific property via Zillow here 
 									        			 +'</tr>');
 						        		}
 						        	}
@@ -627,8 +627,9 @@ $("#submitBtn").click(function(e){
 		    	baths: $("#bathsReg").val(),
 		    	sqft: $("#sqftReg").val()}, 
 		    dataType: 'json',
-		    success: function (data) {    	
-		    	console.log(JSON.stringify(data.modelStats[2]));
+		    success: function (data) {    
+		    	console.log(JSON.stringify(data));
+		    	//console.log(JSON.stringify(data.modelStats[2]));
 		    	$(".estimatedValue").fadeIn(500);
 		    	$(".estimatedValue").offset().top - 10;
 		    	var value = parseInt(data.modelStats[2]);
@@ -636,6 +637,86 @@ $("#submitBtn").click(function(e){
 		    	$("#downloadBtn").show();
 		    	$('#loadingId').modal('hide');
 		    	$(".warnLabel").hide();
+		    },
+		    error: function(e) {
+		    	$('#loadingId').modal('hide');
+		    	console.log("Error: "+JSON.stringify(e));
+		    	Command: toastr["error"]("Cannot find city specified or runtime server error!", "Error!")
+
+		    	toastr.options = {
+		    	  "closeButton": true,
+		    	  "debug": false,
+		    	  "newestOnTop": false,
+		    	  "progressBar": false,
+		    	  "positionClass": "toast-top-right",
+		    	  "preventDuplicates": false,
+		    	  "onclick": null,
+		    	  "showDuration": "300",
+		    	  "hideDuration": "1000",
+		    	  "timeOut": "3000",
+		    	  "extendedTimeOut": "1000",
+		    	  "showEasing": "swing",
+		    	  "hideEasing": "linear",
+		    	  "showMethod": "fadeIn",
+		    	  "hideMethod": "fadeOut"
+		    	}
+		    	console.log("Error: "+JSON.stringify(e));
+		    }
+		});	
+		
+		$.ajax({ 
+		    type: 'POST', 
+		    url: 'Houses', 
+		    data: { oper: 'getLowestHomes', 
+		    	city: $("#cityReg").val(),
+		    	state: $("#stateReg").val(),
+		    	beds: $("#bedsReg").val(),
+		    	baths: $("#bathsReg").val(),
+		    	sqft: $("#sqftReg").val()}, 
+		    dataType: 'json',
+		    success: function (data) {  
+		    	console.log(JSON.stringify(data));
+		    	var mapAddresses = [];
+		    	for (var prop in data) {
+		    		console.log("Key:" + prop);
+		    		console.log("Value:" + data[prop]);
+		    		mapAddresses.push(prop);
+		        }
+		    	var map;
+		        var elevator;
+		        var myOptions = {
+		            zoom: 1,
+		            center: new google.maps.LatLng(0, 0),
+		            mapTypeId: 'terrain'
+		        };
+		        map = new google.maps.Map($('#map')[0], myOptions);
+
+		        var addresses;
+		        addresses = mapAddresses;
+		        var markers = [];
+		        for (var x = 0; x < addresses.length; x++) {
+		        	$.ajax({
+		        		  url:'http://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false',
+		        		  dataType: 'json',
+		        		  async: false,
+		        		  success: function(data) {
+		        			  var p = data.results[0].geometry.location
+				                var latlng = new google.maps.LatLng(p.lat, p.lng);
+				                var marked = new google.maps.Marker({
+				                    position: latlng,
+				                    map: map
+				                });
+				               	markers.push(marked);
+		        		  }
+		        		});
+		        }
+		        var bounds = new google.maps.LatLngBounds();
+                for (var i = 0; i < markers.length; i++) {
+                 bounds.extend(markers[i].getPosition());
+                }
+
+                map.fitBounds(bounds);
+                $("#homesMaps").show();
 		    },
 		    error: function(e) {
 		    	$('#loadingId').modal('hide');

@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -386,9 +388,13 @@ public class Engine extends HttpServlet {
 					Elements price = document.select(".zsg-photo-card-price:contains($)"); //Get price	
 					Elements items = document.select(".zsg-aspect-ratio-content");
 					Elements links = document.select(".zsg-aspect-ratio-content a[href*=homedetails]");
+					double[] lowestPrices = new double[5];
+					ArrayList<String> prices = new ArrayList<>();
+					ArrayList<String> addresses = new ArrayList<>();
+					JSONObject mapPriceAddress = new JSONObject();
 					for (int i=0; i < items.size(); i++) {
 						try {
-							System.out.println(items.get(i).text());
+							//System.out.println(items.get(i).text());
 							String address = items.get(i).text().substring(0, items.get(i).text().indexOf(state)+6);
 							String patternAddress = items.get(i).text().substring(0, items.get(i).text().indexOf(state));
 							String subAddress = patternAddress.replace("#", "").replace(" ", "-").replace("--", "-").trim();
@@ -400,7 +406,10 @@ public class Engine extends HttpServlet {
 							for(int j=0; j < links.size(); j++) {
 								if(links.get(j).toString().contains(subAddress)) {
 									try {
-										sb.append(Double.valueOf(itemPrice.replaceAll("K", "000")));
+										double doublePrice = Double.valueOf(itemPrice.replaceAll("K", "000"));
+										sb.append(doublePrice);
+										prices.add(doublePrice+"");
+										addresses.add(address+","+doublePrice);
 									} catch (NumberFormatException e) {
 										System.out.println("Cleaning invalid data...");
 										sb.append(190000); //just replace with avg value of homes in U.S.
@@ -434,11 +443,32 @@ public class Engine extends HttpServlet {
 							continue;
 						} 
 					}
+					String[] tempArray = new String[prices.size()];
+					prices.toArray(tempArray);
+					Arrays.sort(tempArray);
+					for(int i=0; i < lowestPrices.length; i++) {
+						lowestPrices[i] = Double.valueOf(tempArray[i]);
+					}
+
+					for(int j=0; j < addresses.size(); j++) {
+						for(int i=0; i < lowestPrices.length; i++) {
+							if(lowestPrices[i] == Double.valueOf((addresses.get(j).substring(addresses.get(j).indexOf(",")+1, addresses.get(j).length())))) {
+								//System.out.println(lowestPrices[i]);
+								try {
+									mapPriceAddress.append(addresses.get(j).substring(0, addresses.get(j).indexOf(",")), lowestPrices[i]);
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+					System.out.println(mapPriceAddress.toString());
 				}			
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println(sb.toString());
+			//System.out.println(sb.toString());
 			pw.write(sb.toString());
 	        pw.close();
 			
@@ -447,7 +477,11 @@ public class Engine extends HttpServlet {
 			CSVLoader loader = new CSVLoader();
 			loader.setSource(csvFile);
 			Instances trainSet = loader.getDataSet();
-
+			
+//			File file = new File("C:/Users/Dillon/Desktop/All_Homes_GA.csv");
+//			CSVLoader load = new CSVLoader();
+//			load.setSource(file);
+			
 			double beds = Double.valueOf(request.getParameter("beds"));
 			double baths = Double.valueOf(request.getParameter("baths"));
 			double sqft = Double.valueOf(request.getParameter("sqft"));
@@ -501,6 +535,83 @@ public class Engine extends HttpServlet {
 				response.getWriter().write("Error! Wrong input specified or server error!");
 			}
 			
+		} else if(request.getParameter("oper").equals("getLowestHomes")) {
+			//get request
+			String city = request.getParameter("city");
+			String state = request.getParameter("state");
+			Document document;
+			try {
+				//Get Document object after parsing the html from given url.
+				String url = "https://www.zillow.com/"+city+"-"+state+"/for-sale/";
+				//System.out.println(url);
+				Connection.Response responseSoup = Jsoup.connect(url)
+				        .userAgent("Mozilla/5.0")
+				        .timeout(0).execute();
+				int statusCode = responseSoup.statusCode();
+				if(statusCode == 200){
+					//Get Document object after parsing the html from given url.
+					document = Jsoup.connect(url).get();
+					
+					Elements price = document.select(".zsg-photo-card-price:contains($)"); //Get price	
+					Elements items = document.select(".zsg-aspect-ratio-content");
+					Elements links = document.select(".zsg-aspect-ratio-content a[href*=homedetails]");
+					double[] lowestPrices = new double[5];
+					ArrayList<String> prices = new ArrayList<>();
+					ArrayList<String> addresses = new ArrayList<>();
+					JSONObject mapPriceAddress = new JSONObject();
+					for (int i=0; i < items.size(); i++) {
+						try {
+							//System.out.println(items.get(i).text());
+							String address = items.get(i).text().substring(0, items.get(i).text().indexOf(state)+6);
+							String patternAddress = items.get(i).text().substring(0, items.get(i).text().indexOf(state));
+							String subAddress = patternAddress.replace("#", "").replace(" ", "-").replace("--", "-").trim();
+							String itemInfo = items.get(i).text().substring(items.get(i).text().indexOf("$"),items.get(i).text().lastIndexOf("·"));
+							String itemPrice = itemInfo.substring(1, itemInfo.indexOf("bd")-2).replaceAll(",", "").replaceAll("\\+", "").replaceAll("·", "");							
+							String beds = itemInfo.substring(itemInfo.indexOf("bd")-2,itemInfo.indexOf("bd"));
+							String baths = itemInfo.substring(itemInfo.indexOf("ba")-2,itemInfo.indexOf("ba"));
+							String sqft = itemInfo.substring(itemInfo.indexOf("sqft")-6, itemInfo.indexOf("sqft")-1).replaceAll(",", "");
+							for(int j=0; j < links.size(); j++) {
+								if(links.get(j).toString().contains(subAddress)) {
+									try {
+										double doublePrice = Double.valueOf(itemPrice.replaceAll("K", "000"));
+										prices.add(doublePrice+"");
+										addresses.add(address+","+doublePrice);
+									} catch (NumberFormatException e) {
+										System.out.println("Cleaning invalid data...");
+									}
+								}
+							}
+						} catch (StringIndexOutOfBoundsException e) {
+							System.out.println("Cleaning invalid data...");
+							continue;
+						} 
+					}
+					String[] tempArray = new String[prices.size()];
+					prices.toArray(tempArray);
+					Arrays.sort(tempArray);
+					for(int i=0; i < lowestPrices.length; i++) {
+						lowestPrices[i] = Double.valueOf(tempArray[i]);
+					}
+
+					for(int j=0; j < addresses.size(); j++) {
+						for(int i=0; i < lowestPrices.length; i++) {
+							if(lowestPrices[i] == Double.valueOf((addresses.get(j).substring(addresses.get(j).indexOf(",")+1, addresses.get(j).length())))) {
+								//System.out.println(lowestPrices[i]);
+								try {
+									mapPriceAddress.append(addresses.get(j).substring(0, addresses.get(j).indexOf(",")), lowestPrices[i]);
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+					System.out.println(mapPriceAddress.toString());
+					response.getWriter().write(mapPriceAddress.toString());
+				}			
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		

@@ -17,7 +17,8 @@
 <link href="css/scrollingnav.css" rel="stylesheet">
 
 <!-- Custom CSS -->
-<link href="css/main-theme.min.css" rel="stylesheet">
+<!-- <link href="css/main-theme.min.css" rel="stylesheet"> -->
+<link href="css/second-theme.min.css" rel="stylesheet">
 <link href="css/toastr.min.css" rel="stylesheet">
 
 <link rel="stylesheet"
@@ -404,10 +405,17 @@
 								style="display: none;">Please enter all required preferences!</span>
 						</h4>
 					</div>
-					<hr />
 					<div class="estimatedValue" style="display: none;">
+						<hr />
 						<h3>Your Estimated Value</h3>
 						<div class="estimatePrice" style="color: green;"></div>
+					</div>
+					
+					<!-- TODO: Add google maps -->
+					<hr/>
+					<div id="homesMaps" style="display:none">
+						<h3>Homes for Best Value</h3>
+						<div id="map" style="width:100%; height: 500px;"></div> 
 					</div>
 				</div>
 			</div>
@@ -415,12 +423,7 @@
 	</section>
 
 	<br/>
-	<!-- Footer -->
-	<div id="footer" class="navbar-fixed-bottom">
-<!--       <div class="container" style="margin:10px;"> -->
-<!--       	<p style="color:#fff; text-align:center">Housing Price Estimator 1.0.0 | Calculations assisted using <a target="_blank" href="http://zillow.com">Zillow</a></p> -->
-<!--       </div> -->
-    </div>
+
 	<!-- Loading Spinner Modal -->
 	<div class="modal fade" id="loadingId" tabindex="-1" role="dialog"
 		aria-labelledby="loadingIndicator" aria-hidden="true" data-backdrop="static" data-keyboard="false"> 
@@ -594,13 +597,19 @@
 		</div>
 	</div>
 
+	<!-- Footer -->
+	<div id="footer" class="navbar-fixed-bottom">
+<!--       <div class="container" style="margin:10px;"> -->
+<!--       	<p style="color:#fff; text-align:center">Housing Price Estimator 1.0.0 | Calculations assisted using <a target="_blank" href="http://zillow.com">Zillow</a></p> -->
+<!--       </div> -->
+    </div>
 	<!-- Scripts and other -->
 	<!-- jQuery -->
 	<script src="js/jquery-3.1.0.min.js"></script>
 
 	<!-- Bootstrap Core JavaScript -->
 	<script src="js/bootstrap.min.js"></script>
-
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCx_I_velDvIEDsCpNgjUwIMrUsJMyYSGI&callback=map"></script>
 	<!-- Scrolling Nav JavaScript -->
 	<script src="js/jquery.easing.min.js"></script>
 	<script src="js/scrolling-nav.js"></script>
