@@ -696,7 +696,7 @@ $("#submitBtn").click(function(e){
 		        var markers = [];
 		        for (var x = 0; x < addresses.length; x++) {
 		        	$.ajax({
-		        		  url:'http://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false',
+		        		  url:'https://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false',
 		        		  dataType: 'json',
 		        		  async: false,
 		        		  success: function(data) {
