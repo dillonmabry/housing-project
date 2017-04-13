@@ -14,6 +14,18 @@ html {
     height: 100%;
 }
 
+.btn {
+ border-radius: 0px !important; 
+}
+
+input {
+  border-radius: 0px !important; 
+}
+
+select {
+  border-radius: 0px !important;
+}
+
 .navbar-fixed-bottom {
 	display: block;
     text-align: center;

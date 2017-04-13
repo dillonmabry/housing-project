@@ -685,8 +685,7 @@ $("#submitBtn").click(function(e){
 		        var elevator;
 		        var myOptions = {
 		            zoom: 1,
-		            center: new google.maps.LatLng(0, 0),
-		            mapTypeId: 'terrain'
+		            center: new google.maps.LatLng(0, 0)
 		        };
 		        map = new google.maps.Map($('#map')[0], myOptions);
 

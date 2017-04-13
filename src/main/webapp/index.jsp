@@ -47,7 +47,7 @@
 				<a class="navbar-brand page-scroll" style="padding-bottom:50px" href="#page-top">
 				<img src="img/home-icon.png" height="50px" width="45px"
 				 style='color: #fff;filter: brightness(0) invert(1);position:relative;top:-16px'/></a>
-				 <a class="navbar-brand page-scroll">Housing Price Estimator</a>
+				 <a class="navbar-brand page-scroll" href="#page-top">Housing Price Estimator</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
