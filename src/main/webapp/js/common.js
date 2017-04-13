@@ -635,7 +635,6 @@ $("#submitBtn").click(function(e){
 		    	var value = parseInt(data.modelStats[2]);
 		    	$(".estimatePrice").html("<h1 style='font-weight:400'>$"+value.toLocaleString()+"</h1>");
 		    	$("#downloadBtn").show();
-		    	$('#loadingId').modal('hide');
 		    	$(".warnLabel").hide();
 		    },
 		    error: function(e) {
@@ -696,15 +695,25 @@ $("#submitBtn").click(function(e){
 		        var markers = [];
 		        for (var x = 0; x < addresses.length; x++) {
 		        	$.ajax({
-		        		  url:'https://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false',
+		        		  url:'http://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false',
 		        		  dataType: 'json',
 		        		  async: false,
 		        		  success: function(data) {
 		        			  var p = data.results[0].geometry.location
-				                var latlng = new google.maps.LatLng(p.lat, p.lng);
+		        			  console.log(p);
+				              var latlng = new google.maps.LatLng(p.lat, p.lng);
+		        			  
+		        			  	var contentString = "<a href='https://www.zillow.com/homes/for_sale/"+addresses[x]+"_rb/'  target='_blank'>"+addresses[x]+"</a>";
+		        			  	var infowindow = new google.maps.InfoWindow({
+				                    content: contentString
+				                  });
 				                var marked = new google.maps.Marker({
 				                    position: latlng,
 				                    map: map
+				                });
+
+				                marked.addListener('click', function() {
+				                    infowindow.open(map, marked);
 				                });
 				               	markers.push(marked);
 		        		  }
@@ -717,6 +726,7 @@ $("#submitBtn").click(function(e){
 
                 map.fitBounds(bounds);
                 $("#homesMaps").show();
+                $('#loadingId').modal('hide');
 		    },
 		    error: function(e) {
 		    	$('#loadingId').modal('hide');
