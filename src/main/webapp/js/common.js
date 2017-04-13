@@ -2,7 +2,7 @@
 	    $("#footer").html(
 				'<div class="container">'
 		      	+'<p style="color:#fff; text-align:center; margin:10px">'
-		      	+'Housing Price Estimator '+manifestVersion+' | Calculations assisted using <a target="_blank" href="http://zillow.com">Zillow</a></p>'
+		      	+'Housing Price Estimator '+manifestVersion+' | Calculations assisted using <a target="_blank" href="http://zillow.com">Zillow</a> and <a target="_blank" href="http://www.cs.waikato.ac.nz/ml/weka/">Waikato Institute</a></p>'
 		      	+'</div>'
 		
 		)
@@ -695,7 +695,7 @@ $("#submitBtn").click(function(e){
 		        var markers = [];
 		        for (var x = 0; x < addresses.length; x++) {
 		        	$.ajax({
-		        		  url:'https://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false',
+		        		  url:'http://maps.googleapis.com/maps/api/geocode/json?address='+addresses[x]+'&sensor=false',
 		        		  dataType: 'json',
 		        		  async: false,
 		        		  success: function(data) {
