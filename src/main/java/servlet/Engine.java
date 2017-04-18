@@ -476,12 +476,18 @@ public class Engine extends HttpServlet {
 	        //load CSV file (needs to have numeric data ONLY, i.g. sold value, beds, baths attributes)
 			CSVLoader loader = new CSVLoader();
 			loader.setSource(csvFile);
-			Instances trainSet = loader.getDataSet();
-			
-//			File file = new File("C:/Users/Dillon/Desktop/All_Homes_GA.csv");
-//			CSVLoader load = new CSVLoader();
-//			load.setSource(file);
-			
+			Instances train = loader.getDataSet();
+
+			//split the original dataset from CSV temp file into train/test set
+			int trainSize = (int) Math.round(train.numInstances() * 50
+			    / 100);
+			int testSize = train.numInstances() - trainSize;
+			//trainset first half
+			Instances trainSet = new Instances(train, 0, trainSize);
+			//test set second half
+			Instances testSet = new Instances(train, trainSize, testSize);
+
+			//get user request/inputs for beds, baths, sq ft
 			double beds = Double.valueOf(request.getParameter("beds"));
 			double baths = Double.valueOf(request.getParameter("baths"));
 			double sqft = Double.valueOf(request.getParameter("sqft"));
@@ -497,7 +503,10 @@ public class Engine extends HttpServlet {
 			try{
 				//start Linear Regression 
 				trainSet.setClassIndex(0);
-				LinearRegression lr = buildRegression(trainSet);
+				testSet.setClassIndex(0);
+				//build regression
+				LinearRegression lr = new LinearRegression();
+				lr.buildClassifier(trainSet);
 				responseOut.append("modelStats", lr.toString());
 				//create attributes
 				FastVector atts = new FastVector(3);
@@ -522,18 +531,28 @@ public class Engine extends HttpServlet {
 				int estimateValue = Integer.valueOf((int) lr.classifyInstance(inst));
 				System.out.println(lr.toString());
 				responseOut.append("modelStats", String.valueOf(estimateValue)); 
+				//print out info to log file
+				outWrite.println("");
 				outWrite.println("===================================");
 				outWrite.println(lr.toString());
-				outWrite.println("===================================");
 				outWrite.println("Estimate Price: "+estimateValue);
+				outWrite.println("");
+				Evaluation ev = new Evaluation(trainSet);
+				ev.evaluateModel(lr, testSet);
+				System.out.println(ev.toSummaryString());
+				outWrite.println("===================================");
+				outWrite.println("Evaluation Model");
+				outWrite.println("");
+				outWrite.println(ev.toSummaryString());
+				outWrite.println("");
 				outWrite.close();
-				
 				response.getWriter().write(responseOut.toString());
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.getWriter().write("Error! Wrong input specified or server error!");
 			}
+			
 			
 		} else if(request.getParameter("oper").equals("getLowestHomes")) {
 			//get request
