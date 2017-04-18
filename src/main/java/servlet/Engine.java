@@ -28,6 +28,7 @@ import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import weka.associations.Apriori;
+import weka.classifiers.Evaluation;
 import weka.classifiers.functions.LinearRegression;
 import weka.clusterers.EM;
 import weka.core.Attribute;
@@ -553,7 +554,6 @@ public class Engine extends HttpServlet {
 				response.getWriter().write("Error! Wrong input specified or server error!");
 			}
 			
-			
 		} else if(request.getParameter("oper").equals("getLowestHomes")) {
 			//get request
 			String city = request.getParameter("city");
@@ -636,44 +636,6 @@ public class Engine extends HttpServlet {
 		
 	}
 	
-	/**
-	 * Builds Apriori association
-	 * @param data
-	 * @throws Exception
-	 */
-	private static Apriori buildAssociation(Instances data) throws Exception {
-		NumericToNominal convert= new NumericToNominal();
-        String[] options= new String[2];
-        options[0]="-R";
-        options[1]="1-3";  //range of variables to make numeric
-
-        convert.setOptions(options);
-        convert.setInputFormat(data);
-
-        Instances newData=Filter.useFilter(data, convert);
-
-		newData.setClassIndex(newData.numAttributes() - 1);
-		
-		// build associator
-		Apriori apriori = new Apriori();
-		apriori.setClassIndex(newData.classIndex());
-		
-		apriori.buildAssociations(newData);
-		return apriori;
-	}
-	
-	/**
-	 * Builds linear regression model
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	private static LinearRegression buildRegression(Instances data) throws Exception {
-		LinearRegression lr = new LinearRegression();
-		lr.buildClassifier(data);
-		//TODO: classify an instance
-		return lr;
-	}
 	
 	/**
 	 * Builds basic EM cluster
