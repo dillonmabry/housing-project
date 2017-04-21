@@ -636,6 +636,7 @@ $("#submitBtn").click(function(e){
 		    	$(".estimatePrice").html("<h1 style='font-weight:400'>$"+value.toLocaleString()+"</h1>");
 		    	$("#downloadBtn").show();
 		    	$(".warnLabel").hide();
+		    	$('#loadingId').modal('hide');
 		    },
 		    error: function(e) {
 		    	$('#loadingId').modal('hide');
@@ -725,7 +726,6 @@ $("#submitBtn").click(function(e){
 
                 map.fitBounds(bounds);
                 $("#homesMaps").show();
-                $('#loadingId').modal('hide');
 		    },
 		    error: function(e) {
 		    	$('#loadingId').modal('hide');
