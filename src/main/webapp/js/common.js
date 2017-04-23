@@ -701,26 +701,15 @@ $("#submitBtn").click(function(e){
 		        		  success: function(data) {
 		        			  var p = data.results[0].geometry.location
 		        			  console.log(p);
-		        			  //generate different colored markers
-		        			  var iconsArray = [
-		        			      "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-		        			      "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-		        			      "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-		        			      "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
-		        			      "http://maps.google.com/mapfiles/ms/icons/purple-dot.png",
-		        			      "http://maps.google.com/mapfiles/ms/icons/brown-dot.png"
-		        			  ];
 				              var latlng = new google.maps.LatLng(p.lat, p.lng);
 		        			  
 		        			  	var addressString = "<a href='https://www.zillow.com/homes/for_sale/"+addresses[x]+"_rb/'  target='_blank'>"+addresses[x]+"</a>";
 		        			  	var infowindow = new google.maps.InfoWindow({
 				                    content: addressString,
-				                    
 				                  });
 				                var marked = new google.maps.Marker({
 				                    position: latlng,
 				                    map: map,
-				                    icon: iconsArray[x]
 				                });
 
 				                marked.addListener('click', function() {
